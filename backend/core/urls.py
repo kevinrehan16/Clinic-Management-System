@@ -6,6 +6,8 @@ from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView,
 )
+# Import spectacular views
+from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 
 urlpatterns = [
     # Django Admin Panel
@@ -21,6 +23,9 @@ urlpatterns = [
     path('api/v1/doctors/', include('doctors.urls')),          
     path('api/v1/appointments/', include('appointments.urls')),
     path('api/v1/patients/', include('patients.urls')),
+
+    path('api/schema/', SpectacularAPIView.as_view(authentication_classes=[]), name='schema'),
+    path('api/docs/', SpectacularSwaggerView.as_view(authentication_classes=[], url_name='schema'), name='swagger-ui'),
 ]
 
 # Pag-handle ng Media at Static uploads sa Development Environment
