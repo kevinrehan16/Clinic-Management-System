@@ -14,3 +14,18 @@ class PatientAppointmentView(ListCreateAPIView):
             'patient', 
             'doctor'
         )
+    
+    def get_queryset(self):
+        # ... iyong code
+        return Appointment.objects.all()
+    
+# class PatientAppointmentView(ListCreateAPIView):
+#     """
+#     API endpoint that allows appointments to be viewed or created.
+#     """
+#     permission_classes = [IsAuthenticated]
+#     serializer_class = AppointmentCreateSerializer
+    
+#     def get_queryset(self):
+#         # ... iyong code
+#         return Appointment.objects.all()
