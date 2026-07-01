@@ -5,9 +5,17 @@ import { ThemeProvider } from './contexts/ThemeContext';
 import LoginPage from './pages/LoginPage';
 import MainLayout from './components/layout/MainLayout';
 
+// PATIENTS
+import Patients from './pages/patients/patients';
+
 // Protected Route Component
 const ProtectedRoute = () => {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, isLoading } = useAuth();
+
+  if (isLoading) {
+    return <div>Loading...</div>; // O kaya loading spinner/skeleton
+  }
+
   return isAuthenticated ? <Outlet /> : <Navigate to="/login" replace />;
 };
 
@@ -24,7 +32,7 @@ function App() {
             <Route element={<ProtectedRoute />}>
               <Route element={<MainLayout />}>
                 <Route path="/" element={<div>Welcome to Dashboard</div>} />
-                <Route path="/patients" element={<div>Patient Management Module</div>} />
+                <Route path="/patients" element={<Patients />} />
               </Route>
             </Route>
             

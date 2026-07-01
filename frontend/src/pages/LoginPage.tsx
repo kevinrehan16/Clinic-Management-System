@@ -3,9 +3,11 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { motion } from 'framer-motion';
-import { Stethoscope, Lock, User, ArrowRight } from 'lucide-react';
+import { Lock, User, ArrowRight } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import { useTheme } from '../contexts/ThemeContext';
+import apiClient from '../api/axiosInstance'; 
 
 const loginSchema = z.object({
   username: z.string().min(3, "Username required"),
@@ -13,7 +15,8 @@ const loginSchema = z.object({
 });
 
 export default function LoginPage() {
-  const { login } = useAuth();
+  const { loginStateUpdate } = useAuth(); // Gagamitin ang bagong lightweight state updater natin
+  const { theme } = useTheme();
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
 
@@ -23,32 +26,48 @@ export default function LoginPage() {
 
   const onSubmit = async (data: any) => {
     setIsLoading(true);
-    await new Promise(resolve => setTimeout(resolve, 800));
-    login();
-    navigate('/');
-    setIsLoading(false);
+    try {
+      // I-post ang username at password. Kusa nang itatanim ng browser ang cookies mula sa server response.
+      await apiClient.post('users/login/', {
+        username: data.username,
+        password: data.password
+      });
+
+      // Tawagin ang context function para gawing true ang isAuthenticated
+      loginStateUpdate();
+
+      // Diretso kaagad sa dashboard
+      navigate('/');
+    } catch (error) {
+      console.error("Login failed:", error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
     <div className="min-h-screen flex bg-slate-100">
-      {/* LEFT PANEL: Deep Blue Background for high contrast */}
-      <div className="hidden lg:flex w-1/2 bg-[#0284c7] p-12 flex-col justify-between text-white">
-        <div className="flex items-center gap-2 text-2xl font-bold">
-          <Stethoscope className="w-8 h-8 text-white" />
-          <span>ClinicOS</span>
+      {/* LEFT PANEL: Dynamic Background */}
+      <div 
+        className="hidden lg:flex w-1/2 p-12 flex-col justify-between text-white transition-colors duration-500"
+        style={{ backgroundColor: theme.activeParentBg }}
+      >
+        <div className="flex items-center gap-3">
+          <img src="/web_images/clinic.jpg" alt="Logo" className="w-10 h-10 rounded-full border-2 border-white/20" />
+          <span className="text-2xl font-bold tracking-tight">MedSalus</span>
         </div>
         
         <div className="space-y-4">
           <h1 className="text-5xl font-extrabold leading-tight">Patient care, managed with precision.</h1>
-          <p className="text-sky-100 text-lg font-medium max-w-md">
+          <p className="text-white/80 text-lg font-medium max-w-md">
             The most reliable platform for modern clinics. Secure, scalable, and built for healthcare professionals.
           </p>
         </div>
         
-        <div className="text-sm text-sky-200/80 font-medium">© 2026 ClinicOS Systems</div>
+        <div className="text-sm text-white/60 font-medium">© 2026 MediPulse Systems</div>
       </div>
 
-      {/* RIGHT PANEL: Crisp White Form */}
+      {/* RIGHT PANEL */}
       <div className="w-full lg:w-1/2 flex items-center justify-center p-8">
         <motion.div 
           initial={{ opacity: 0, x: 20 }} 
@@ -67,7 +86,8 @@ export default function LoginPage() {
                 <User className="absolute left-3 top-3.5 w-5 h-5 text-slate-400" />
                 <input 
                   {...register('username')} 
-                  className="w-full pl-11 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-[#0284c7] outline-none transition-all text-slate-900 placeholder:text-slate-400"
+                  className="w-full pl-11 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl outline-none transition-all text-slate-900 placeholder:text-slate-400 focus:ring-2"
+                  style={{ '--tw-ring-color': theme.activeParentBg } as React.CSSProperties}
                   placeholder="Enter your ID"
                 />
               </div>
@@ -81,7 +101,8 @@ export default function LoginPage() {
                 <input 
                   type="password" 
                   {...register('password')} 
-                  className="w-full pl-11 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-[#0284c7] outline-none transition-all text-slate-900 placeholder:text-slate-400"
+                  className="w-full pl-11 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl outline-none transition-all text-slate-900 placeholder:text-slate-400 focus:ring-2"
+                  style={{ '--tw-ring-color': theme.activeParentBg } as React.CSSProperties}
                   placeholder="••••••••"
                 />
               </div>
@@ -91,7 +112,8 @@ export default function LoginPage() {
             <button 
               disabled={isLoading}
               type="submit" 
-              className="w-full bg-[#0284c7] hover:bg-blue-700 text-white py-3.5 rounded-xl font-bold flex items-center justify-center gap-2 transition-all active:scale-[0.98] shadow-lg shadow-blue-500/20"
+              className="w-full text-white py-3.5 rounded-xl font-bold flex items-center justify-center gap-2 transition-all active:scale-[0.98] shadow-lg"
+              style={{ backgroundColor: theme.activeParentBg, boxShadow: `0 10px 15px -3px ${theme.activeParentBg}40` }}
             >
               {isLoading ? "Authenticating..." : "Sign in to Portal"}
               {!isLoading && <ArrowRight className="w-5 h-5" />}

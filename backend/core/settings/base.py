@@ -27,8 +27,8 @@ DJANGO_APPS = [
 
 THIRD_PARTY_APPS = [
     'rest_framework',        # Kung gagawa tayo ng REST API mamaya
-    'corsheaders',
     'drf_spectacular',
+    'corsheaders',
 ]
 
 LOCAL_APPS = [
@@ -56,6 +56,16 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:5173", # Ito ang URL ng React app mo
+    "http://127.0.0.1:5173",
+]
+
+CORS_ALLOW_CREDENTIALS = True
+SESSION_COOKIE_SECURE = False
+SESSION_COOKIE_SAMESITE = 'Lax'
+SESSION_ENGINE = 'django.contrib.sessions.backends.db'
 
 TEMPLATES = [
     {
@@ -93,7 +103,8 @@ AUTH_PASSWORD_VALIDATORS = [
 # Django Rest Framework Global Configurations
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
+        'users.authentication.CookieJWTAuthentication',
+        # 'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated', # Lock lahat ng endpoints by default para secure
@@ -121,6 +132,14 @@ SIMPLE_JWT = {
     'SIGNING_KEY': SECRET_KEY,
     'AUTH_HEADER_TYPES': ('Bearer',),                   # 'Bearer <TOKEN>' ang format sa front-end
     'AUTH_TOKEN_CLASSES': ('rest_framework_simplejwt.tokens.AccessToken',),
+
+    # Babasahin ni Django ang token mula sa cookie na ito kapag gumagamit ng JWTAuthentication
+    'AUTH_COOKIE': 'access_token',  
+    'AUTH_COOKIE_REFRESH': 'refresh_token',
+    'AUTH_COOKIE_SECURE': False,     # I-True mo ito kapag naka-HTTPS (Production) na ang site mo
+    'AUTH_COOKIE_HTTP_ONLY': True,   # Hinding-hindi mababasa ng JavaScript (Ito ang proteksyon sa XSS)
+    'AUTH_COOKIE_PATH': '/',
+    'AUTH_COOKIE_SAMESITE': 'Lax',   # Proteksyon laban sa CSRF attacks
 }
 
 ROOT_URLCONF = 'core.urls'

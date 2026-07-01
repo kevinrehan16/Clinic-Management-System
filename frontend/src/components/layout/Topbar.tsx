@@ -1,13 +1,21 @@
 import { useState, useRef, useEffect } from 'react';
-import { PanelLeftClose, PanelRightOpen, User, Lock, LogOut } from 'lucide-react';
+import { PanelLeftClose, PanelRightOpen, Lock, LogOut } from 'lucide-react';
 import { useTheme } from '../../contexts/ThemeContext';
+import { useAuth } from '../../contexts/AuthContext';
+import { getInitials } from '../../utils/formatters';
 
 export default function Topbar({ isCollapsed, setIsCollapsed }: any) {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   
-  // Dito natin kinuha yung current theme state
   const { theme } = useTheme();
+  // 1. I-extract ang 'user' mula sa context
+  const { user, logout } = useAuth();
+
+  const handleLogout = async () => {
+    setIsOpen(false);
+    await logout();
+  };
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -22,45 +30,42 @@ export default function Topbar({ isCollapsed, setIsCollapsed }: any) {
   return (
     <header 
       className="h-16 flex items-center px-6 justify-between border-b border-slate-200/50 transition-colors duration-300"
-      // Direct style application para siguradong gagana ang theme update
       style={{ backgroundColor: theme.topbarBg, borderColor: theme.topbarBorder, color: theme.topbarAccent }}
     >
-      {/* Burger Button */}
       <button 
         onClick={() => setIsCollapsed(!isCollapsed)}
         className="p-2 rounded-lg text-slate-500 transition-all duration-300 hover:bg-slate-200/50 active:scale-90 cursor-pointer"
-        style={{ color: theme.topbarAccent }} // Apply the accent color to the burger button
+        style={{ color: theme.topbarAccent }}
       >
         {isCollapsed ? <PanelRightOpen size={20} /> : <PanelLeftClose size={20} />}
       </button>
 
-      {/* Profile Trigger - Only Picture */}
+      {/* Profile Trigger */}
       <div className="relative" ref={dropdownRef}>
         <button 
           onClick={() => setIsOpen(!isOpen)}
           className="w-9 h-9 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold text-xs border border-blue-200 hover:ring-2 hover:ring-blue-500/20 transition-all duration-300 hover:shadow-md active:scale-95 cursor-pointer"
         >
-          JD
+          {/* 2. Dito natin ilalagay ang dynamic initials */}
+          {user ? getInitials(user.first_name + ' ' + user.last_name) : '??'}
         </button>
 
-        {/* Dropdown Popup */}
         {isOpen && (
           <div className="absolute right-0 top-full mt-2 w-56 bg-white border border-slate-200 rounded-xl shadow-xl overflow-hidden animate-in fade-in zoom-in duration-200 z-50">
             
-            {/* Profile Header inside Popup */}
             <div className="p-4 border-b border-slate-100 bg-slate-50">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-full bg-blue-100 border border-blue-200 flex items-center justify-center text-blue-600 font-semibold shadow-sm">
-                  JD
+                  {user ? getInitials(user.first_name + ' ' + user.last_name) : '??'}
                 </div>
                 <div>
-                  <p className="text-sm font-semibold text-slate-900">Juan Dela Cruz</p>
-                  <p className="text-xs text-slate-500">Administrator</p>
+                  {/* 3. Dito ang dynamic name at role */}
+                  <p className="text-sm font-semibold text-slate-900">{user?.first_name} {user?.last_name}</p>
+                  <p className="text-xs text-slate-500">{user?.role || 'User'}</p>
                 </div>
               </div>
             </div>
 
-            {/* Menu Items */}
             <div className="p-1">
               <button 
                 onClick={() => setIsOpen(false)} 
@@ -72,7 +77,7 @@ export default function Topbar({ isCollapsed, setIsCollapsed }: any) {
               <div className="border-t border-slate-100 my-1" />
               
               <button 
-                onClick={() => setIsOpen(false)} 
+                onClick={handleLogout} 
                 className="w-full flex items-center gap-2 px-3 py-2 text-sm text-red-600 hover:bg-red-50 rounded-md transition-all duration-200 cursor-pointer"
               >
                 <LogOut size={16} /> Logout
