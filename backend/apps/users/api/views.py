@@ -3,7 +3,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.generics import RetrieveUpdateAPIView
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from .serializers import PatientRegistrationSerializer, UserProfileSerializer # Pwedeng pag-isahin ang import line na ito
+from ..serializers import PatientRegistrationSerializer, UserProfileSerializer # Pwedeng pag-isahin ang import line na ito
 
 class PatientRegisterView(APIView):
     # Papayagan natin ang kahit sino (kahit hindi pa naka-login) na makapag-register

@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import PatientRegisterView,  PatientProfileUpdateView
+from .api.views import PatientRegisterView,  PatientProfileUpdateView
 # I-import ang mga built-in views ng Simple JWT para sa Authentication
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
