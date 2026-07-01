@@ -10,7 +10,7 @@ export default function Patients() {
   const [currentPage, setCurrentPage] = useState(1);
   
   // FIX: Siguradong 5 ang items per page
-  const itemsPerPage = 4;
+  const itemsPerPage = 10;
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -74,53 +74,58 @@ export default function Patients() {
       </div>
 
       <div className="w-full bg-white border border-slate-200/60 rounded-3xl shadow-sm overflow-hidden">
-        <div className="overflow-x-auto">
-          <table className="w-full text-left text-sm">
-            <thead>
-              <tr className="bg-slate-50/50 text-slate-500 uppercase tracking-wider text-[10px] font-bold border-b border-slate-200/60">
-                <th className="px-6 py-4">Patient Details</th>
-                <th className="px-6 py-4">Age / Gender</th>
-                <th className="px-6 py-4">Contact Gateway</th>
-                <th className="px-6 py-4">Last Visit</th>
-                <th className="px-6 py-4 text-center">Status</th>
-                <th className="px-6 py-4 text-right">Action</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-100">
-              {loading ? (
-                <tr><td colSpan={6} className="p-8 text-center text-slate-400">Loading records...</td></tr>
-              ) : currentPatients.length > 0 ? (
-                currentPatients.map((patient) => (
-                  <tr key={patient.id} className="group hover:bg-[var(--active-parent,rgb(99,102,241))]/5 transition-all duration-200">
-                    <td className="px-6 py-4">
-                      <div className="flex items-center gap-3">
-                        <div className="w-9 h-9 rounded-full bg-slate-100 text-slate-500 flex items-center justify-center font-bold text-xs border border-slate-200 group-hover:bg-[var(--active-parent,rgb(99,102,241))]/10 group-hover:text-[var(--active-parent,rgb(99,102,241))] transition-colors">
-                          {patient.name.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase()}
+        {/* Container: Dito natin ilalagay ang limit ng height at scroll */}
+        <div className="overflow-y-auto overflow-x-auto max-h-[350px] border border-slate-200/60 rounded-lg">
+            <table className="w-full text-left text-sm border-separate border-spacing-0">
+                <thead className="sticky top-0 z-10 bg-slate-50"> {/* Ginamit natin ang 'sticky top-0' */}
+                <tr className="text-slate-500 uppercase tracking-wider text-[10px] font-bold border-b border-slate-200/60">
+                    <th className="px-6 py-4">Patient Details</th>
+                    <th className="px-6 py-4">Age / Gender</th>
+                    <th className="px-6 py-4">Contact Gateway</th>
+                    <th className="px-6 py-4">Last Visit</th>
+                    <th className="px-6 py-4 text-center">Status</th>
+                    <th className="px-6 py-4 text-right">Action</th>
+                </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-100">
+                {loading ? (
+                    <tr>
+                    <td colSpan={6} className="p-8 text-center text-slate-400">Loading records...</td>
+                    </tr>
+                ) : currentPatients.length > 0 ? (
+                    currentPatients.map((patient) => (
+                    <tr key={patient.id} className="group hover:bg-[var(--active-parent,rgb(99,102,241))]/5 transition-all duration-200">
+                        <td className="px-6 py-4">
+                        <div className="flex items-center gap-3">
+                            <div className="w-9 h-9 rounded-full bg-slate-100 text-slate-500 flex items-center justify-center font-bold text-xs border border-slate-200 group-hover:bg-[var(--active-parent,rgb(99,102,241))]/10 group-hover:text-[var(--active-parent,rgb(99,102,241))] transition-colors">
+                            {patient.name.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase()}
+                            </div>
+                            <div>
+                            <p className="font-semibold text-slate-800 group-hover:text-[var(--active-parent,rgb(99,102,241))] transition-colors">{patient.name}</p>
+                            <p className="text-[10px] font-mono text-slate-400 group-hover:text-[var(--active-parent,rgb(99,102,241))]/60 transition-colors">{patient.id}</p>
+                            </div>
                         </div>
-                        <div>
-                          <p className="font-semibold text-slate-800 group-hover:text-[var(--active-parent,rgb(99,102,241))] transition-colors">{patient.name}</p>
-                          <p className="text-[10px] font-mono text-slate-400 group-hover:text-[var(--active-parent,rgb(99,102,241))]/60 transition-colors">{patient.id}</p>
-                        </div>
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 text-slate-600">{patient.age} yrs / {patient.gender}</td>
-                    <td className="px-6 py-4 text-slate-500 text-xs">{patient.phone}</td>
-                    <td className="px-6 py-4 text-slate-600 text-xs">{patient.lastVisit}</td>
-                    <td className="px-6 py-4 text-center">
-                      <span className={`px-2.5 py-1 rounded-full text-[10px] font-bold uppercase ${patient.status === 'Active' ? 'bg-emerald-50 text-emerald-600' : 'bg-slate-100 text-slate-500'}`}>
-                        {patient.status}
-                      </span>
-                    </td>
-                    <td className="px-6 py-4 text-right">
-                      <button className="text-slate-400 group-hover:text-[var(--active-parent,rgb(99,102,241))] font-semibold text-xs hover:underline transition-colors">View Profile</button>
-                    </td>
-                  </tr>
-                ))
-              ) : (
-                 <tr><td colSpan={6} className="p-8 text-center text-slate-400">No patients found.</td></tr>
-              )}
-            </tbody>
-          </table>
+                        </td>
+                        <td className="px-6 py-4 text-slate-600">{patient.age} yrs / {patient.gender}</td>
+                        <td className="px-6 py-4 text-slate-500 text-xs">{patient.phone}</td>
+                        <td className="px-6 py-4 text-slate-600 text-xs">{patient.lastVisit}</td>
+                        <td className="px-6 py-4 text-center">
+                        <span className={`px-2.5 py-1 rounded-full text-[10px] font-bold uppercase ${patient.status === 'Active' ? 'bg-emerald-50 text-emerald-600' : 'bg-slate-100 text-slate-500'}`}>
+                            {patient.status}
+                        </span>
+                        </td>
+                        <td className="px-6 py-4 text-right">
+                        <button className="text-slate-400 group-hover:text-[var(--active-parent,rgb(99,102,241))] font-semibold text-xs hover:underline transition-colors">View Profile</button>
+                        </td>
+                    </tr>
+                    ))
+                ) : (
+                    <tr>
+                    <td colSpan={6} className="p-8 text-center text-slate-400">No patients found.</td>
+                    </tr>
+                )}
+                </tbody>
+            </table>
         </div>
 
         <div className="flex items-center justify-between px-6 py-4 border-t border-slate-100 bg-slate-50/50">
