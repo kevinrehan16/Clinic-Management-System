@@ -1,11 +1,14 @@
 import { useState } from 'react';
-import { Plus, Search, Filter, ArrowUpDown, Users, Mail, Phone } from 'lucide-react';
+import { Plus, Search, Filter, ArrowUpDown, Users, Mail, Phone, Eye } from 'lucide-react';
 import ModuleHeader from '../../components/ModuleHeader';
 import { usePatients } from '../../hooks/usePatients';
 import { calculateAge } from '../../utils/formatters';
+import RegisterPatientModal from '../../components/modals/patientModals/RegisterPatientModal';
 
 export default function Patients() {
   const { data: patients = [], isLoading, isError } = usePatients();
+  const [selectedPatientId, setSelectedPatientId] = useState<string | null>(null);
+  const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
   
   const [searchTerm, setSearchTerm] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
@@ -23,6 +26,11 @@ export default function Patients() {
   const indexOfFirst = indexOfLast - itemsPerPage;
   const currentPatients = filteredPatients.slice(indexOfFirst, indexOfLast);
 
+  const handleViewProfile = (id: string) => {
+    setSelectedPatientId(id);
+    setIsRegisterModalOpen(true);
+  };
+
   return (
     <div className="w-full bg-slate-50 text-slate-800 px-6 py-4 space-y-6">
       
@@ -31,7 +39,10 @@ export default function Patients() {
         description="Centralized health records registry and real-time patient status management."
         icon={<Users size={24} />}
         actions={
-          <button className="group flex items-center gap-2 px-5 py-2.5 bg-[#e11d48] hover:bg-[#be123c] active:scale-95 text-white rounded-xl text-sm font-semibold transition-all shadow-md shadow-rose-500/10">
+          <button 
+            className="group flex items-center gap-2 px-5 py-2.5 bg-[#e11d48] hover:bg-[#be123c] active:scale-95 text-white rounded-xl text-sm font-semibold transition-all shadow-md shadow-rose-500/10"
+            onClick={() => setIsRegisterModalOpen(true)}
+          >
             <Plus size={16} className="transition-transform group-hover:rotate-90" />
             Register New Patient
           </button>
@@ -66,7 +77,7 @@ export default function Patients() {
       <div className="w-full bg-white border border-slate-200/60 rounded-3xl shadow-sm overflow-hidden">
         <div className="overflow-y-auto overflow-x-auto h-[calc(100vh-325px)] border border-slate-200/60 rounded-lg">
             <table className="w-full text-left text-sm border-separate border-spacing-0">
-                <thead className="sticky top-0 z-10 bg-slate-300">
+                <thead className="sticky top-0 z-10 bg-slate-200">
                   <tr className="text-slate-600 uppercase tracking-wider text-[10px] font-extrabold border-b border-slate-200/60">
                     <th className="px-6 py-4">Patient Details</th>
                     <th className="px-6 py-4">Age / Gender</th>
@@ -79,11 +90,11 @@ export default function Patients() {
                 <tbody className="divide-y divide-slate-100">
                 {isLoading ? (
                     <tr>
-                    <td colSpan={6} className="p-8 text-center text-slate-400">Loading records...</td>
+                      <td colSpan={6} className="p-8 text-center text-slate-400">Loading records...</td>
                     </tr>
                 ) : isError ? (
                     <tr>
-                    <td colSpan={6} className="p-8 text-center text-red-500">Error loading data</td>
+                      <td colSpan={6} className="p-8 text-center text-red-500">Error loading data</td>
                     </tr>
                 ) : currentPatients.length > 0 ? (
                     currentPatients.map((patient) => (
@@ -102,8 +113,8 @@ export default function Patients() {
                         {/* Age / Gender Column */}
                         <td className="px-6 py-4">
                           <div className="flex flex-col">
-                            <span className="font-mono text-slate-800 text-sm">
-                              {calculateAge(patient.birth_date)} <span className="text-slate-400 font-normal">years old</span>
+                            <span className="font-normal text-slate-800 text-sm">
+                              <b className='font-mono'>{calculateAge(patient.birth_date)}</b> <span className="text-slate-400 font-normal">years old</span>
                             </span>
                             <span className="text-[10px] font-bold uppercase text-slate-400 tracking-wider">
                               {patient.gender}
@@ -149,7 +160,14 @@ export default function Patients() {
                           </div>
                         </td>
                         <td className="px-6 py-4 text-center">
-                        <button className="text-slate-400 group-hover:text-[var(--active-parent,rgb(99,102,241))] font-semibold text-xs hover:underline transition-colors">View Profile</button>
+                          <button 
+                            onClick={() => handleViewProfile(patient.id)} // Ipasa mo yung ID ng patient
+                            className="inline-flex items-center gap-2 px-2 py-1.5 rounded-lg text-xs font-medium 
+                            text-slate-600 bg-slate-100 hover:bg-[#e11d48] hover:text-white 
+                            transition-all duration-200 active:scale-95 hover:cursor-pointer"
+                          >
+                            <Eye size={14} />
+                          </button>
                         </td>
                     </tr>
                     ))
@@ -162,7 +180,7 @@ export default function Patients() {
             </table>
         </div>
 
-        <div className="flex items-center justify-between px-6 py-4 border-t border-slate-100 bg-slate-50/50">
+        <div className="flex items-center justify-between px-6 py-4 border-t border-slate-100 bg-slate-100/50">
           <p className="text-xs text-slate-500 font-medium">
             Showing <span className="text-slate-800 font-bold">{filteredPatients.length > 0 ? indexOfFirst + 1 : 0}</span> to <span className="text-slate-800 font-bold">{Math.min(indexOfLast, filteredPatients.length)}</span> of <span className="text-slate-800 font-bold">{filteredPatients.length}</span> entries
           </p>
@@ -180,6 +198,15 @@ export default function Patients() {
           </div>
         </div>
       </div>
+
+      {/* Register Patient Modal */}
+      {isRegisterModalOpen && (
+        <RegisterPatientModal 
+          isOpen={isRegisterModalOpen}
+          onClose={() => setIsRegisterModalOpen(false)} 
+          patientId={selectedPatientId}
+        />
+      )}
     </div>
   );
 }

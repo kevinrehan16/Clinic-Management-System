@@ -23,15 +23,19 @@ class PatientRegistrationSerializer(serializers.ModelSerializer):
     password_confirm = serializers.CharField(write_only=True, style={'input_type': 'password'})
 
     # Tahasang ideklara ang mga fields na ito para tanggapin at i-validate ni DRF ang inputs mula sa frontend
+    first_name = serializers.CharField(required=True, allow_blank=False)
+    last_name = serializers.CharField(required=True, allow_blank=False)
     birth_date = serializers.DateField(required=True, allow_null=False)
     gender = serializers.CharField(required=False, allow_blank=True, default='')
     blood_type = serializers.CharField(required=False, allow_blank=True, default='')
+    phone_number = serializers.CharField(required=False, allow_blank=True, default='')
+    address = serializers.CharField(required=False, allow_blank=True)
 
     class Meta:
         model = User
         fields = [
             'username', 'email', 'password', 'password_confirm', 
-            'first_name', 'last_name', 'birth_date', 'gender', 'blood_type'
+            'first_name', 'last_name', 'birth_date', 'gender', 'blood_type', 'phone_number', 'address'
         ]
 
     def validate(self, attrs):
@@ -54,6 +58,8 @@ class PatientRegistrationSerializer(serializers.ModelSerializer):
                 username=validated_data['username'],
                 email=validated_data['email'],
                 password=validated_data['password'],
+                phone_number=validated_data['phone_number'],
+                address=validated_data['address'],
                 first_name=validated_data.get('first_name', ''),
                 last_name=validated_data.get('last_name', ''),
                 role=User.Roles.PATIENT 

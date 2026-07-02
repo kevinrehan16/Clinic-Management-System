@@ -19,3 +19,9 @@ export const getPatients = async (): Promise<Patient[]> => {
   const response = await apiClient.get('patients/list/');
   return response.data; 
 };
+
+export const registerPatient = async (patientData: any) => {
+  // Ang endpoint ay /users/register/patient/
+  const response = await apiClient.post('/users/register/patient/', patientData);
+  return response.data;
+};
