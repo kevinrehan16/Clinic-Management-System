@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route, Navigate, Outlet } from 'react-router-dom';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 // 1. Siguraduhin na naka-import ang ThemeProvider
 import { ThemeProvider } from './contexts/ThemeContext'; 
 import LoginPage from './pages/LoginPage';
@@ -20,27 +21,31 @@ const ProtectedRoute = () => {
 };
 
 function App() {
+  const queryClient = new QueryClient();
+  
   return (
     // 2. I-wrap ang buong app sa ThemeProvider
-    <ThemeProvider> 
-      <AuthProvider>
-        <BrowserRouter>
-          <Routes>
-            <Route path="/login" element={<LoginPage />} />
-            
-            {/* Protected Routes */}
-            <Route element={<ProtectedRoute />}>
-              <Route element={<MainLayout />}>
-                <Route path="/" element={<div>Welcome to Dashboard</div>} />
-                <Route path="/patients" element={<Patients />} />
+    <QueryClientProvider client={queryClient}>
+      <ThemeProvider> 
+        <AuthProvider>
+          <BrowserRouter>
+            <Routes>
+              <Route path="/login" element={<LoginPage />} />
+              
+              {/* Protected Routes */}
+              <Route element={<ProtectedRoute />}>
+                <Route element={<MainLayout />}>
+                  <Route path="/" element={<div>Welcome to Dashboard</div>} />
+                  <Route path="/patients" element={<Patients />} />
+                </Route>
               </Route>
-            </Route>
-            
-            <Route path="*" element={<Navigate to="/" />} />
-          </Routes>
-        </BrowserRouter>
-      </AuthProvider>
-    </ThemeProvider>
+              
+              <Route path="*" element={<Navigate to="/" />} />
+            </Routes>
+          </BrowserRouter>
+        </AuthProvider>
+      </ThemeProvider>
+    </QueryClientProvider>
   );
 }
 

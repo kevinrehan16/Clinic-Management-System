@@ -29,7 +29,7 @@ apiClient.interceptors.request.use((config) => {
   const url = config.url || '';
   const now = Date.now();
 
-  if (url.includes('users/auth/me/') || url.includes('/token/refresh/')) {
+  if (url.includes('users/auth/me/') || url.includes('/auth/token/refresh/')) {
     return config;
   }
 
@@ -81,7 +81,7 @@ apiClient.interceptors.response.use(
 
       try {
         // Mag-request ng bagong cookie (GAMIT ANG PURE AXIOS)
-        await axios.post(`${import.meta.env.VITE_API_URL}/token/refresh/`, {}, {
+        await axios.post(`${import.meta.env.VITE_API_URL}/auth/token/refresh/`, {}, {
           withCredentials: true 
         });
 

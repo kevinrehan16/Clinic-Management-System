@@ -1,40 +1,30 @@
-import { useState, useEffect } from 'react';
-import { Plus, Search, Filter, ArrowUpDown, Users } from 'lucide-react';
+import { useState } from 'react';
+import { Plus, Search, Filter, ArrowUpDown, Users, Mail, Phone } from 'lucide-react';
 import ModuleHeader from '../../components/ModuleHeader';
-import { MOCK_PATIENTS, type Patient } from '../../types/mockPatients';
+import { usePatients } from '../../hooks/usePatients';
+import { calculateAge } from '../../utils/formatters';
 
 export default function Patients() {
-  const [patients, setPatients] = useState<Patient[]>([]);
-  const [loading, setLoading] = useState(true);
+  const { data: patients = [], isLoading, isError } = usePatients();
+  
   const [searchTerm, setSearchTerm] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
-  
-  // FIX: Siguradong 5 ang items per page
   const itemsPerPage = 10;
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setPatients(MOCK_PATIENTS);
-      setLoading(false);
-    }, 500);
-    return () => clearTimeout(timer);
-  }, []);
-
-  // FIX: Inalis ang '|| p.id...' para Name lang ang basehan ng search
+  // Filter logic: Base sa nested user data
   const filteredPatients = patients.filter(p => 
-    p.name.toLowerCase().includes(searchTerm.toLowerCase()) || p.id.toLowerCase().includes(searchTerm.toLowerCase())
+    `${p.user.first_name} ${p.user.last_name}`.toLowerCase().includes(searchTerm.toLowerCase()) || 
+    p.id.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  // PAGINATION LOGIC:
+  // PAGINATION LOGIC
   const totalPages = Math.ceil(filteredPatients.length / itemsPerPage);
-  
-  // Reset sa page 1 kapag nag-search
   const indexOfLast = currentPage * itemsPerPage;
   const indexOfFirst = indexOfLast - itemsPerPage;
   const currentPatients = filteredPatients.slice(indexOfFirst, indexOfLast);
 
   return (
-    <div className="w-full bg-slate-50 text-slate-800 p-8 space-y-6">
+    <div className="w-full bg-slate-50 text-slate-800 px-6 py-4 space-y-6">
       
       <ModuleHeader
         title="Patients Directory"
@@ -57,7 +47,7 @@ export default function Patients() {
             value={searchTerm}
             onChange={(e) => { 
               setSearchTerm(e.target.value); 
-              setCurrentPage(1); // Importante: balik sa page 1 kapag nag-search
+              setCurrentPage(1); 
             }}
             className="bg-transparent w-full border-none outline-none text-sm placeholder-slate-400 text-slate-700"
           />
@@ -74,23 +64,26 @@ export default function Patients() {
       </div>
 
       <div className="w-full bg-white border border-slate-200/60 rounded-3xl shadow-sm overflow-hidden">
-        {/* Container: Dito natin ilalagay ang limit ng height at scroll */}
-        <div className="overflow-y-auto overflow-x-auto h-[calc(100vh-355px)] border border-slate-200/60 rounded-lg">
+        <div className="overflow-y-auto overflow-x-auto h-[calc(100vh-325px)] border border-slate-200/60 rounded-lg">
             <table className="w-full text-left text-sm border-separate border-spacing-0">
-                {/* Ginawa nating compact ang tag na ito para iwas hydration error */}
-                <thead className="sticky top-0 z-10 bg-slate-50"><tr className="text-slate-500 uppercase tracking-wider text-[10px] font-bold border-b border-slate-200/60">
+                <thead className="sticky top-0 z-10 bg-slate-300">
+                  <tr className="text-slate-600 uppercase tracking-wider text-[10px] font-extrabold border-b border-slate-200/60">
                     <th className="px-6 py-4">Patient Details</th>
                     <th className="px-6 py-4">Age / Gender</th>
                     <th className="px-6 py-4">Contact Gateway</th>
-                    <th className="px-6 py-4">Last Visit</th>
+                    <th className="px-6 py-4 text-center">Blood Type</th>
                     <th className="px-6 py-4 text-center">Status</th>
-                    <th className="px-6 py-4 text-right">Action</th>
-                </tr>
+                    <th className="px-6 py-4 text-center">Actions</th>
+                  </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-100">
-                {loading ? (
+                {isLoading ? (
                     <tr>
                     <td colSpan={6} className="p-8 text-center text-slate-400">Loading records...</td>
+                    </tr>
+                ) : isError ? (
+                    <tr>
+                    <td colSpan={6} className="p-8 text-center text-red-500">Error loading data</td>
                     </tr>
                 ) : currentPatients.length > 0 ? (
                     currentPatients.map((patient) => (
@@ -98,23 +91,64 @@ export default function Patients() {
                         <td className="px-6 py-4">
                         <div className="flex items-center gap-3">
                             <div className="w-9 h-9 rounded-full bg-slate-100 text-slate-500 flex items-center justify-center font-bold text-xs border border-slate-200 group-hover:bg-[var(--active-parent,rgb(99,102,241))]/10 group-hover:text-[var(--active-parent,rgb(99,102,241))] transition-colors">
-                            {patient.name.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase()}
+                            {patient.user.first_name[0]}{patient.user.last_name[0]}
                             </div>
                             <div>
-                            <p className="font-semibold text-slate-800 group-hover:text-[var(--active-parent,rgb(99,102,241))] transition-colors">{patient.name}</p>
-                            <p className="text-[10px] font-mono text-slate-400 group-hover:text-[var(--active-parent,rgb(99,102,241))]/60 transition-colors">{patient.id}</p>
+                            <p className="font-semibold text-slate-800 group-hover:text-[var(--active-parent,rgb(99,102,241))] transition-colors">{patient.user.first_name} {patient.user.last_name}</p>
+                            <p className="text-[10px] font-mono text-slate-400 group-hover:text-[var(--active-parent,rgb(99,102,241))]/60 transition-colors">{patient.id.slice(0, 8)}...</p>
                             </div>
                         </div>
                         </td>
-                        <td className="px-6 py-4 text-slate-600">{patient.age} yrs / {patient.gender}</td>
-                        <td className="px-6 py-4 text-slate-500 text-xs">{patient.phone}</td>
-                        <td className="px-6 py-4 text-slate-600 text-xs">{patient.lastVisit}</td>
-                        <td className="px-6 py-4 text-center">
-                        <span className={`px-2.5 py-1 rounded-full text-[10px] font-bold uppercase ${patient.status === 'Active' ? 'bg-emerald-50 text-emerald-600' : 'bg-slate-100 text-slate-500'}`}>
-                            {patient.status}
-                        </span>
+                        {/* Age / Gender Column */}
+                        <td className="px-6 py-4">
+                          <div className="flex flex-col">
+                            <span className="font-mono text-slate-800 text-sm">
+                              {calculateAge(patient.birth_date)} <span className="text-slate-400 font-normal">years old</span>
+                            </span>
+                            <span className="text-[10px] font-bold uppercase text-slate-400 tracking-wider">
+                              {patient.gender}
+                            </span>
+                          </div>
                         </td>
-                        <td className="px-6 py-4 text-right">
+                        <td className="px-6 py-4">
+                          <div className="flex flex-col gap-1.5">
+                            {/* Email */}
+                            <div className="flex items-center gap-2 text-slate-600">
+                              <Mail size={12} className="text-slate-400 shrink-0" />
+                              <span className="text-xs truncate max-w-[150px]">{patient.user.email}</span>
+                            </div>
+                            
+                            {/* Phone Number */}
+                            <div className="flex items-center gap-2 text-slate-600">
+                              <Phone size={12} className="text-slate-400 shrink-0" />
+                              <span className="text-xs font-mono">
+                                {patient.user.phone_number || <span className="text-slate-300 italic">No number</span>}
+                              </span>
+                            </div>
+                          </div>
+                        </td>
+                        {/* Blood Type Column */}
+                        <td className="px-6 py-4 text-center">
+                          <div className="flex items-center justify-center">
+                            <span className="px-2.5 py-1 rounded-lg bg-red-50 text-red-600 font-bold text-xs border border-red-100 shadow-sm">
+                              {patient.blood_type}
+                            </span>
+                          </div>
+                        </td>
+                        <td className="px-6 py-4 text-center">
+                          <div className="flex items-center justify-center">
+                            <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wide border transition-colors ${
+                              patient.user.is_active 
+                                ? 'bg-emerald-50 border-emerald-200 text-emerald-700' 
+                                : 'bg-slate-50 border-slate-200 text-slate-500'
+                            }`}>
+                              {/* Indicator Dot */}
+                              <span className={`w-1.5 h-1.5 rounded-full mb-0.5 ${patient.user.is_active ? 'bg-emerald-500' : 'bg-slate-400'}`}></span>
+                              {patient.user.is_active ? 'Active' : 'Inactive'}
+                            </span>
+                          </div>
+                        </td>
+                        <td className="px-6 py-4 text-center">
                         <button className="text-slate-400 group-hover:text-[var(--active-parent,rgb(99,102,241))] font-semibold text-xs hover:underline transition-colors">View Profile</button>
                         </td>
                     </tr>
@@ -136,18 +170,11 @@ export default function Patients() {
           <div className="flex items-center gap-1">
             <button onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))} disabled={currentPage === 1} className="px-3 py-1.5 text-xs font-semibold text-slate-600 hover:bg-slate-200 rounded-lg disabled:opacity-30">Prev</button>
             
-            {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => {
-              // Logic para sa pagination dots
-              if (page === 1 || page === totalPages || (page >= currentPage - 1 && page <= currentPage + 1)) {
-                return (
-                  <button key={page} onClick={() => setCurrentPage(page)} className={`px-3 py-1.5 text-xs font-semibold rounded-lg ${currentPage === page ? 'bg-[var(--active-parent,rgb(99,102,241))] text-white' : 'text-slate-600 hover:bg-slate-200'}`}>
-                    {page}
-                  </button>
-                );
-              }
-              if (page === currentPage - 2 || page === currentPage + 2) return <span key={page} className="px-2 text-slate-400">...</span>;
-              return null;
-            })}
+            {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+              <button key={page} onClick={() => setCurrentPage(page)} className={`px-3 py-1.5 text-xs font-semibold rounded-lg ${currentPage === page ? 'bg-[var(--active-parent,rgb(99,102,241))] text-white' : 'text-slate-600 hover:bg-slate-200'}`}>
+                {page}
+              </button>
+            ))}
 
             <button onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))} disabled={currentPage === totalPages || totalPages === 0} className="px-3 py-1.5 text-xs font-semibold text-slate-600 hover:bg-slate-200 rounded-lg disabled:opacity-30">Next</button>
           </div>
