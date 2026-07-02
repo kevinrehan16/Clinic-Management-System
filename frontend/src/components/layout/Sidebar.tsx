@@ -205,10 +205,10 @@ export default function Sidebar({
            )}
            <button 
              onClick={onOpenSettings}
-             className="p-2 hover:bg-slate-700 rounded-lg text-slate-400 hover:text-white transition-all duration-300 hover:rotate-90"
+             className="p-2 hover:bg-slate-700 rounded-lg text-slate-400 hover:text-white"
              title="Change Theme"
            >
-             <Settings size={18} />
+             <Settings size={18} className="transition-transform duration-300 hover:rotate-90" />
            </button>
         </div>
       </div>

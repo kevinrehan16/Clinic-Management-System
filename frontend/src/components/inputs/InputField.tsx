@@ -10,10 +10,13 @@ interface InputFieldProps {
   placeholder?: string;
   value?: string;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  defaultValue?: string;
+  readOnly?: boolean;
   required?: boolean;
 }
 
-export const InputField = ({ label, name, error, type = "text", icon, placeholder, value, onChange, required }: InputFieldProps) => {
+export const InputField = ({ label, name, error, type = "text", icon, placeholder, value, onChange, defaultValue, readOnly = false, required }: InputFieldProps) => {
+
   return (
     <div className="space-y-1.5 w-full">
       <label className="text-[10px] font-bold uppercase text-slate-400 tracking-wider ml-1">
@@ -29,8 +32,10 @@ export const InputField = ({ label, name, error, type = "text", icon, placeholde
           name={name}
           type={type}
           value={value}
+          defaultValue={defaultValue}
           onChange={onChange}
           placeholder={placeholder}
+          readOnly={readOnly}
           className={`w-full ${icon ? 'pl-10' : 'pl-4'} pr-4 py-2.5 rounded-xl border border-slate-200 focus:border-[var(--active-parent,rgb(99,102,241))] focus:ring-4 focus:ring-[var(--active-parent,rgb(99,102,241))]/10 outline-none transition-all text-sm ${error && '!border-red-500 focus:!border-red-500'}`}
         />
       </div>

@@ -40,8 +40,8 @@ export default function Patients() {
         icon={<Users size={24} />}
         actions={
           <button 
-            className="group flex items-center gap-2 px-5 py-2.5 bg-[#e11d48] hover:bg-[#be123c] active:scale-95 text-white rounded-xl text-sm font-semibold transition-all shadow-md shadow-rose-500/10"
-            onClick={() => setIsRegisterModalOpen(true)}
+            className="group flex items-center gap-2 px-5 py-2.5 bg-[#0284c7] hover:bg-[#026ca1] active:scale-95 text-white rounded-xl text-sm font-semibold transition-all shadow-md shadow-rose-500/10"
+            onClick={() => handleViewProfile(null)}
           >
             <Plus size={16} className="transition-transform group-hover:rotate-90" />
             Register New Patient

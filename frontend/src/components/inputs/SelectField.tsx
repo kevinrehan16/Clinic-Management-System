@@ -6,9 +6,11 @@ interface SelectFieldProps {
   error?: string[];
   options: { label: string; value: string }[];
   icon?: React.ReactNode;
+  defaultValue?: string;
+  readOnly?: boolean;
 }
 
-export const SelectField = ({ label, name, error, options, icon }: SelectFieldProps) => {
+export const SelectField = ({ label, name, error, options, icon, defaultValue, readOnly = false }: SelectFieldProps) => {
   return (
     <div className="space-y-1.5 w-full">
       <label className="text-[10px] font-bold uppercase text-slate-400 tracking-wider ml-1">{label}</label>
@@ -22,11 +24,14 @@ export const SelectField = ({ label, name, error, options, icon }: SelectFieldPr
         
         {/* Select Input */}
         <select 
+          key={defaultValue}
           name={name}
+          defaultValue={defaultValue}
+          disabled={readOnly}
           className={`w-full ${icon ? 'pl-10' : 'pl-4'} pr-10 py-2.5 rounded-xl border border-slate-200 
           focus:border-[var(--active-parent,rgb(99,102,241))] 
           focus:ring-4 focus:ring-[var(--active-parent,rgb(99,102,241))]/10 
-          outline-none transition-all text-sm bg-white appearance-none cursor-pointer ${error ? 'border-red-500 focus:border-red-500' : 'border-slate-200'}`}
+          outline-none transition-all text-sm bg-white appearance-none cursor-pointer ${error ? 'border-red-500 focus:border-red-500' : 'border-slate-200'} ${readOnly ? 'bg-slate-50 cursor-not-allowed opacity-70' : 'cursor-pointer'}`}
         >
           {options.map((opt) => (
             <option key={opt.value} value={opt.value}>{opt.label}</option>

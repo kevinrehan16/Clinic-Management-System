@@ -18,7 +18,7 @@ class PatientListCreateView(generics.ListCreateAPIView):
     queryset = PatientProfile.objects.select_related('user').filter(user__role='PATIENT').order_by('-created_at')
     serializer_class = PatientSerializer
 
-class PatientDetailView(generics.RetrieveAPIView):
+class PatientDetailView(generics.RetrieveUpdateAPIView):
     queryset = PatientProfile.objects.select_related('user').all()
     serializer_class = PatientSerializer
     lookup_field = 'id' # Ito yung field na hahanapin sa URL (e.g., /api/v1/users/patients/1/)
