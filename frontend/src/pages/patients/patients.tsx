@@ -16,7 +16,7 @@ export default function Patients() {
 
   // Filter logic: Base sa nested user data
   const filteredPatients = patients.filter(p => 
-    `${p.user.first_name} ${p.user.last_name}`.toLowerCase().includes(searchTerm.toLowerCase()) || 
+    `${p.first_name} ${p.last_name}`.toLowerCase().includes(searchTerm.toLowerCase()) || 
     p.id.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
@@ -102,10 +102,10 @@ export default function Patients() {
                         <td className="px-6 py-4">
                         <div className="flex items-center gap-3">
                             <div className="w-9 h-9 rounded-full bg-slate-100 text-slate-500 flex items-center justify-center font-bold text-xs border border-slate-200 group-hover:bg-[var(--active-parent,rgb(99,102,241))]/10 group-hover:text-[var(--active-parent,rgb(99,102,241))] transition-colors">
-                            {patient.user.first_name[0]}{patient.user.last_name[0]}
+                            {patient.first_name[0]}{patient.last_name[0]}
                             </div>
                             <div>
-                            <p className="font-semibold text-slate-800 group-hover:text-[var(--active-parent,rgb(99,102,241))] transition-colors">{patient.user.first_name} {patient.user.last_name}</p>
+                            <p className="font-semibold text-slate-800 group-hover:text-[var(--active-parent,rgb(99,102,241))] transition-colors">{patient.first_name} {patient.last_name}</p>
                             <p className="text-[10px] font-mono text-slate-400 group-hover:text-[var(--active-parent,rgb(99,102,241))]/60 transition-colors">{patient.id.slice(0, 8)}...</p>
                             </div>
                         </div>
@@ -126,14 +126,14 @@ export default function Patients() {
                             {/* Email */}
                             <div className="flex items-center gap-2 text-slate-600">
                               <Mail size={12} className="text-slate-400 shrink-0" />
-                              <span className="text-xs truncate max-w-[150px]">{patient.user.email}</span>
+                              <span className="text-xs truncate max-w-[150px]">{patient.email}</span>
                             </div>
                             
                             {/* Phone Number */}
                             <div className="flex items-center gap-2 text-slate-600">
                               <Phone size={12} className="text-slate-400 shrink-0" />
                               <span className="text-xs font-mono">
-                                {patient.user.phone_number || <span className="text-slate-300 italic">No number</span>}
+                                {patient.phone_number || <span className="text-slate-300 italic">No number</span>}
                               </span>
                             </div>
                           </div>
@@ -149,13 +149,13 @@ export default function Patients() {
                         <td className="px-6 py-4 text-center">
                           <div className="flex items-center justify-center">
                             <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wide border transition-colors ${
-                              patient.user.is_active 
+                              patient.is_active 
                                 ? 'bg-emerald-50 border-emerald-200 text-emerald-700' 
                                 : 'bg-slate-50 border-slate-200 text-slate-500'
                             }`}>
                               {/* Indicator Dot */}
-                              <span className={`w-1.5 h-1.5 rounded-full mb-0.5 ${patient.user.is_active ? 'bg-emerald-500' : 'bg-slate-400'}`}></span>
-                              {patient.user.is_active ? 'Active' : 'Inactive'}
+                              <span className={`w-1.5 h-1.5 rounded-full mb-0.5 ${patient.is_active ? 'bg-emerald-500' : 'bg-slate-400'}`}></span>
+                              {patient.is_active ? 'Active' : 'Inactive'}
                             </span>
                           </div>
                         </td>

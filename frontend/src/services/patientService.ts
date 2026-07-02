@@ -3,15 +3,13 @@ import apiClient from '../api/axiosInstance';
 // Interface para sa Patient (Read)
 export interface Patient {
   id: string;
-  user: {
-    username: string; // Idagdag mo rin ito
-    first_name: string;
-    last_name: string;
-    email: string;
-    phone_number: string | null;
-    is_active: boolean;
-    address: string;
-  };
+  username: string; // Idagdag mo rin ito
+  first_name: string;
+  last_name: string;
+  email: string;
+  phone_number: string | null;
+  is_active: boolean;
+  address: string;
   phone_number: string | null;
   birth_date: string;
   gender: string;

@@ -43,5 +43,8 @@ export const useUpdatePatient = () => {
       queryClient.invalidateQueries({ queryKey: ['patients'] });
       queryClient.invalidateQueries({ queryKey: ['patient', variables.id] });
     },
+    onError: (error: any) => {
+      console.error("Updating failed:", error.response?.data || error.message);
+    }
   });
 };

@@ -25,24 +25,6 @@ export default function RegisterPatientModal({ isOpen, onClose, patientId }: Mod
     const data = Object.fromEntries(formData.entries());
     
     if (patientId) {
-        const data = {
-            user: {
-                first_name: formData.get('first_name'),
-                last_name: formData.get('last_name'),
-                phone_number: formData.get('phone_number'),
-                email: formData.get('email'),
-                address: formData.get('address'),
-                username: formData.get('username'),
-                is_active: true, // I-set kung kailangan
-            },
-            birth_date: formData.get('birth_date'),
-            gender: formData.get('gender'),
-            medical_notes: formData.get('medical_notes'),
-            blood_type: formData.get('blood_type'),
-            emergency_contact_name: formData.get('emergency_contact_name'),
-            emergency_contact_phone: formData.get('emergency_contact_phone'),
-        };
-        
         update({ id: patientId, data }, {
             onSuccess: () => {
                 onClose();
@@ -101,7 +83,7 @@ export default function RegisterPatientModal({ isOpen, onClose, patientId }: Mod
                 label="Username" 
                 name="username" 
                 error={errors.username} 
-                defaultValue={patient?.user.username || ''}
+                defaultValue={patient?.username || ''}
                 readOnly={!!patientId}
                 icon={<User size={16}/>} 
                 placeholder="john_doe" 
@@ -111,7 +93,7 @@ export default function RegisterPatientModal({ isOpen, onClose, patientId }: Mod
               label="Email Address" 
               name="email" 
               error={errors.email} 
-              defaultValue={patient?.user.email || ''}
+              defaultValue={patient?.email || ''}
               readOnly={isEditMode && !isEditing}
               type="email" 
               icon={<Mail size={16}/>} 
@@ -122,7 +104,7 @@ export default function RegisterPatientModal({ isOpen, onClose, patientId }: Mod
               name="first_name" 
               error={errors.first_name} 
               icon={<User size={16}/>} 
-              defaultValue={patient?.user.first_name || ''}
+              defaultValue={patient?.first_name || ''}
               readOnly={isEditMode && !isEditing}
               placeholder="John" />
 
@@ -132,7 +114,7 @@ export default function RegisterPatientModal({ isOpen, onClose, patientId }: Mod
                 error={errors.last_name} 
                 icon={<User size={16}/>} 
                 placeholder="Doe" 
-                defaultValue={patient?.user.last_name || ''}
+                defaultValue={patient?.last_name || ''}
                 readOnly={isEditMode && !isEditing}
               />
               {!isEditMode && (
@@ -155,7 +137,7 @@ export default function RegisterPatientModal({ isOpen, onClose, patientId }: Mod
                 label="Phone Number" 
                 name="phone_number" 
                 error={errors.phone_number} 
-                defaultValue={patient?.user?.phone_number || ''}
+                defaultValue={patient?.phone_number || ''}
                 readOnly={isEditMode && !isEditing}
                 icon={<Phone size={16}/>} 
                 placeholder="0915..."
@@ -191,7 +173,7 @@ export default function RegisterPatientModal({ isOpen, onClose, patientId }: Mod
                     error={errors.address} 
                     icon={<MapPin size={16}/>} 
                     placeholder="Imus, Cavite"
-                    defaultValue={patient?.user?.address || ''}
+                    defaultValue={patient?.address || ''}
                     readOnly={isEditMode && !isEditing}
                 />
               </div>
