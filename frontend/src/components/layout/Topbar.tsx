@@ -30,7 +30,7 @@ export default function Topbar({ isCollapsed, setIsCollapsed }: any) {
 
   return (
     <header 
-      className="h-16 flex items-center px-6 justify-between border-b border-slate-200/50 transition-colors duration-300"
+      className="h-16 flex shadow-md z-10 items-center px-6 justify-between border-b border-slate-200/50 transition-colors duration-300"
       style={{ backgroundColor: theme.topbarBg, borderColor: theme.topbarBorder, color: theme.topbarAccent }}
     >
       <button 

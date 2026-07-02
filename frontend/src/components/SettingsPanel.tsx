@@ -6,9 +6,9 @@ export const SettingsPanel = ({ isOpen, onClose }: { isOpen: boolean; onClose: (
 
   // Presets para sa Sidebar Themes
   const sidebarPresets = [
-    { name: 'Light', sidebarBg: '#f8fafc', menuTextColor: '#1e293b' },
-    { name: 'Dark', sidebarBg: '#1e293b', menuTextColor: '#f8fafc' },
-    { name: 'Midnight', sidebarBg: '#0f172a', menuTextColor: '#f8fafc' },
+    { name: 'Light', sidebarBg: '#ffffff', menuTextColor: '#1e293b' },
+    { name: 'Dark', sidebarBg: '#1e293b', menuTextColor: '#ffffff' },
+    { name: 'Midnight', sidebarBg: '#0f172a', menuTextColor: '#ffffff' },
   ];
 
   // Presets para sa Topbar Design
@@ -53,7 +53,7 @@ export const SettingsPanel = ({ isOpen, onClose }: { isOpen: boolean; onClose: (
                     className={`relative h-16 w-full border rounded-lg transition-all flex items-center justify-center ${theme.sidebarBg === preset.sidebarBg ? 'ring-2 ring-blue-500 ring-offset-2' : 'hover:scale-105'}`}
                     style={{ backgroundColor: preset.sidebarBg }}
                   >
-                    {theme.sidebarBg === preset.sidebarBg && <Check size={20} className={preset.sidebarBg === '#f8fafc' ? 'text-slate-800' : 'text-white'} />}
+                    {theme.sidebarBg === preset.sidebarBg && <Check size={20} className={(preset.sidebarBg === '#f8fafc' || preset.sidebarBg === '#ffffff' || preset.sidebarBg === 'white') ? 'text-slate-800' : 'text-white'} />}
                   </button>
                 ))}
               </div>

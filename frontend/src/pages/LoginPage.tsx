@@ -54,7 +54,7 @@ export default function LoginPage() {
         style={{ backgroundColor: theme.activeParentBg }}
       >
         <div className="flex items-center gap-3">
-          <img src="/web_images/clinic.jpg" alt="Logo" className="w-10 h-10 rounded-full border-2 border-white/20" />
+          <img src="/web_images/salus.png" alt="Logo" className="w-40 h-40 rounded-full border-2 border-white/20" />
           <span className="text-2xl font-bold tracking-tight">MedSalus</span>
         </div>
         

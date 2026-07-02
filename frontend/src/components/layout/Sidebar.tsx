@@ -66,17 +66,17 @@ export default function Sidebar({
 
   return (
     <aside 
-      className={`h-full flex flex-col transition-all duration-300 ease-in-out ${isCollapsed ? 'w-20' : 'w-64'}`}
+      className={`h-full shadow-xl relative z-20 flex flex-col transition-all duration-300 ease-in-out ${isCollapsed ? 'w-20' : 'w-64'}`}
       style={{ backgroundColor: getColor('--sidebar-bg'), color: getColor('--menu-text') }}
     >
       
       {/* Brand Logo */}
-      <div className={`h-16 flex items-center ${isCollapsed ? 'justify-center px-0' : 'px-5'} border-b border-slate-700/50 shrink-0`}>
+      <div className={`h-16 flex items-center ${isCollapsed ? 'justify-center px-0' : 'px-5'} border-b border-slate-400/50 shrink-0`}>
         <div className="inline-block p-1 rounded-full border-3 border-[var(--active-parent)]">
           <img 
-            src="/web_images/clinic.jpg" 
+            src="/web_images/salus.png" 
             alt="Logo" 
-            className="h-8 w-8 rounded-full object-cover shadow-md" 
+            className="h-7 w-7 rounded-full object-cover shadow-md" 
           />
         </div>
         {!isCollapsed && <span className="ml-2.5 font-extrabold text-xl tracking-tight">Med<span className="text-[var(--active-parent)]">Salus</span></span>}
@@ -197,7 +197,7 @@ export default function Sidebar({
       </nav>
 
       {/* Footer */}
-      <div className="p-4 border-t border-slate-700/50 mt-auto bg-slate-900/30">
+      <div className="p-4 border-t border-slate-400/50 mt-auto bg-slate-800">
         <div className={`flex items-center ${isCollapsed ? 'justify-center' : 'justify-between'}`}>
            {!isCollapsed && (
              <div className="flex items-center gap-3">
