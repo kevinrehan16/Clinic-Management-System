@@ -27,19 +27,20 @@ export default function LoginPage() {
   const onSubmit = async (data: any) => {
     setIsLoading(true);
     try {
-      // I-post ang username at password. Kusa nang itatanim ng browser ang cookies mula sa server response.
+      // 1. Kumuha ng access at refresh cookies
       await apiClient.post('users/login/', {
         username: data.username,
         password: data.password
       });
 
-      // Tawagin ang context function para gawing true ang isAuthenticated
-      fetchUser();
+      // 2. AWAIT ANG FETCHUSER: Siguraduhing updated na ang context bago mag-navigate!
+      await fetchUser();
 
-      // Diretso kaagad sa dashboard
-      navigate('/');
+      // 3. Diretso kaagad sa dashboard nang walang sabit
+      navigate('/', { replace: true });
     } catch (error) {
       console.error("Login failed:", error);
+      alert("Invalid credentials.");
     } finally {
       setIsLoading(false);
     }
