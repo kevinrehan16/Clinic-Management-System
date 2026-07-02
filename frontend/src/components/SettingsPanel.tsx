@@ -78,9 +78,9 @@ export const SettingsPanel = ({ isOpen, onClose }: { isOpen: boolean; onClose: (
             
             <hr />
 
-            {/* 3. Active Menu Accent */}
+            {/* 3. Other Background Accent */}
             <div>
-              <p className="text-sm font-semibold text-slate-700 mb-3">Active Menu Accent</p>
+              <p className="text-sm font-semibold text-slate-700 mb-3">Other Background Accent</p>
               <div className="flex flex-wrap gap-3">
                 {accentPresets.map((color) => (
                   <button

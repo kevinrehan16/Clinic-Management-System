@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Plus, Search, Filter, ArrowUpDown, Users, Mail, Phone, Eye } from 'lucide-react';
+import { Plus, Search, Filter, ArrowUpDown, Users, Mail, Phone, Eye, Droplet } from 'lucide-react';
 import ModuleHeader from '../../components/ModuleHeader';
 import { usePatients } from '../../hooks/usePatients';
 import { calculateAge } from '../../utils/formatters';
@@ -77,8 +77,8 @@ export default function Patients() {
       <div className="w-full bg-white border border-slate-200/60 rounded-xl shadow-sm overflow-hidden">
         <div className="overflow-y-auto overflow-x-auto h-[calc(100vh-325px)] border border-slate-200/60 rounded-lg">
             <table className="w-full text-left text-sm border-separate border-spacing-0">
-                <thead className="sticky top-0 z-10 bg-slate-200">
-                  <tr className="text-slate-600 uppercase tracking-wider text-[10px] font-extrabold border-b border-slate-200/60">
+                <thead className="sticky top-0 z-10 bg-[var(--active-parent)]">
+                  <tr className="text-white uppercase tracking-wider text-[10px] font-extrabold border-b border-slate-200/60">
                     <th className="px-6 py-4">Patient Details</th>
                     <th className="px-6 py-4">Age / Gender</th>
                     <th className="px-6 py-4">Contact Gateway</th>
@@ -141,7 +141,9 @@ export default function Patients() {
                         {/* Blood Type Column */}
                         <td className="px-6 py-4 text-center">
                           <div className="flex items-center justify-center">
-                            <span className="px-2.5 py-1 rounded-lg bg-red-50 text-red-600 font-bold text-xs border border-red-100 shadow-sm">
+                            {/* Nagdagdag tayo ng 'w-20' para sa fixed width at 'justify-center' para laging nasa gitna ang content */}
+                            <span className="flex items-center justify-center w-16 px-3 py-1.5 rounded-full bg-rose-600 text-white font-black text-xs shadow-md shadow-rose-200">
+                              <Droplet size={14} className="text-rose-200 fill-rose-200" />
                               {patient.blood_type}
                             </span>
                           </div>

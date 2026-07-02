@@ -6,7 +6,8 @@ import { ThemeProvider } from './contexts/ThemeContext';
 import LoginPage from './pages/LoginPage';
 import MainLayout from './components/layout/MainLayout';
 
-// PATIENTS
+// PAGES
+import AdminDashboard from './pages/dashboards/AdminDashboard';
 import Patients from './pages/patients/patients';
 
 // Protected Route Component
@@ -35,7 +36,7 @@ function App() {
               {/* Protected Routes */}
               <Route element={<ProtectedRoute />}>
                 <Route element={<MainLayout />}>
-                  <Route path="/" element={<div>Welcome to Dashboard</div>} />
+                  <Route path="/" element={<AdminDashboard />} />
                   <Route path="/patients" element={<Patients />} />
                 </Route>
               </Route>

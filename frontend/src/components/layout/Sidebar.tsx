@@ -72,11 +72,18 @@ export default function Sidebar({
       
       {/* Brand Logo */}
       <div className={`h-16 flex items-center ${isCollapsed ? 'justify-center px-0' : 'px-5'} border-b border-slate-400/50 shrink-0`}>
-        <div className="inline-block p-1 rounded-full border-3 border-[var(--active-parent)]">
+        <div 
+          className="inline-block p-1 rounded-full border-3 border-[var(--active-parent)] transition-all duration-300 ease-in-out shadow-md flex items-center justify-center overflow-hidden shrink-0 aspect-square"
+          style={{
+            width: isCollapsed ? '35px' : '40px',
+            height: isCollapsed ? '35px' : '40px' // Bagaman may height, ang aspect-square at shrink-0 ang pipigil sa pagiging oblong
+          }}
+        >
+          {/* Image - Naka-w-full at h-full para laging sumunod nang sakto sa loob ng bilog */}
           <img 
             src="/web_images/salus.png" 
             alt="Logo" 
-            className="h-7 w-7 rounded-full object-cover shadow-md" 
+            className="w-full h-full rounded-full object-cover object-center shrink-0" 
           />
         </div>
         {!isCollapsed && <span className="ml-2.5 font-extrabold text-xl tracking-tight">Med<span className="text-[var(--active-parent)]">Salus</span></span>}
@@ -212,12 +219,12 @@ export default function Sidebar({
              </div>
            )}
            <button 
-             onClick={onOpenSettings}
-             className="p-2 hover:bg-slate-700 rounded-lg text-slate-400 hover:text-white"
-             title="Change Theme"
-           >
-             <Settings size={18} className="transition-transform duration-300 hover:rotate-90" />
-           </button>
+            onClick={onOpenSettings}
+            className="p-2 hover:bg-slate-700 rounded-full text-slate-400 hover:text-white transition-all duration-300 hover:rotate-90 flex items-center justify-center"
+            title="Change Theme"
+          >
+            <Settings size={18} />
+          </button>
         </div>
       </div>
     </aside>
