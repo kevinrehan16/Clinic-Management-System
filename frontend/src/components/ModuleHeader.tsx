@@ -14,7 +14,7 @@ export default function ModuleHeader({ title, description, actions, icon }: Modu
       <div className="flex items-center gap-4">
         {/* ICON CONTAINER */}
         {icon && (
-          <div className="p-3 bg-slate-900 text-[var(--active-parent,rgb(99,102,241))] rounded-2xl shrink-0">
+          <div className="p-3 bg-slate-900 text-[var(--active-parent,rgb(99,102,241))] rounded-full shrink-0">
             {icon}
           </div>
         )}

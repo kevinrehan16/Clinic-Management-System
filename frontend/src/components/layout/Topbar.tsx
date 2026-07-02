@@ -11,6 +11,7 @@ export default function Topbar({ isCollapsed, setIsCollapsed }: any) {
   const { theme } = useTheme();
   // 1. I-extract ang 'user' mula sa context
   const { user, logout } = useAuth();
+  const isWhiteBg = theme.topbarBg?.toLowerCase() === '#ffffff' || theme.topbarBg?.toLowerCase() === 'white';
 
   const handleLogout = async () => {
     setIsOpen(false);
@@ -44,7 +45,16 @@ export default function Topbar({ isCollapsed, setIsCollapsed }: any) {
       <div className="relative" ref={dropdownRef}>
         <button 
           onClick={() => setIsOpen(!isOpen)}
-          className="w-9 h-9 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold text-xs border border-blue-200 hover:ring-2 hover:ring-blue-500/20 transition-all duration-300 hover:shadow-md active:scale-95 cursor-pointer"
+          style={{ 
+            color: isWhiteBg ? '#000000' : theme.topbarBg,
+            '--glow-color': theme.topbarAccent,
+            '--offset-color': theme.topbarBg
+          } as React.CSSProperties}
+          className={`w-9 h-9 rounded-full bg-blue-100 flex items-center justify-center font-bold text-xs border-2 border-white 
+                      transition-all duration-300 ease-in-out
+                      hover:shadow-[0_0_15px_var(--glow-color)]
+                      hover:ring-2 hover:ring-offset-2 hover:ring-offset-[var(--offset-color)]
+                      active:scale-95 cursor-pointer ${isWhiteBg ? 'hover:ring-black' : 'hover:ring-white'}`}
         >
           {/* 2. Dito natin ilalagay ang dynamic initials */}
           {user ? getInitials(user.first_name + ' ' + user.last_name) : '??'}
@@ -55,7 +65,15 @@ export default function Topbar({ isCollapsed, setIsCollapsed }: any) {
             
             <div className="p-4 border-b border-slate-100 bg-slate-50">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-blue-100 border border-blue-200 flex items-center justify-center text-blue-600 font-semibold shadow-sm">
+                <div 
+                  style={{ 
+                    color: isWhiteBg ? '#000000' : theme.topbarBg,
+                    '--ring-color': isWhiteBg ? '#000000' : theme.topbarBg 
+                  } as React.CSSProperties}
+                  className="w-10 h-10 rounded-full bg-blue-100 border border-blue-200 flex items-center justify-center font-semibold shadow-sm 
+                            transition-all duration-300 ease-in-out 
+                            ring-2 ring-[var(--ring-color)] ring-offset-2 cursor-pointer"
+                >
                   {user ? getInitials(user.first_name + ' ' + user.last_name) : '??'}
                 </div>
                 <div>

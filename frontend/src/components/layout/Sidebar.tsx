@@ -65,13 +65,21 @@ export default function Sidebar({
   );
 
   return (
-    <aside className={`h-full flex flex-col transition-all duration-300 ease-in-out ${isCollapsed ? 'w-20' : 'w-64'}`}
-           style={{ backgroundColor: getColor('--sidebar-bg'), color: getColor('--menu-text') }}>
+    <aside 
+      className={`h-full flex flex-col transition-all duration-300 ease-in-out ${isCollapsed ? 'w-20' : 'w-64'}`}
+      style={{ backgroundColor: getColor('--sidebar-bg'), color: getColor('--menu-text') }}
+    >
       
       {/* Brand Logo */}
       <div className={`h-16 flex items-center ${isCollapsed ? 'justify-center px-0' : 'px-5'} border-b border-slate-700/50 shrink-0`}>
-        <img src="/web_images/clinic.jpg" alt="Logo" className="h-10 w-10 rounded-full border-2 border-slate-500 object-cover shadow-md" />
-        {!isCollapsed && <span className="ml-3.5 font-extrabold text-xl tracking-tight">MedSalus</span>}
+        <div className="inline-block p-1 rounded-full border-3 border-[var(--active-parent)]">
+          <img 
+            src="/web_images/clinic.jpg" 
+            alt="Logo" 
+            className="h-8 w-8 rounded-full object-cover shadow-md" 
+          />
+        </div>
+        {!isCollapsed && <span className="ml-2.5 font-extrabold text-xl tracking-tight">Med<span className="text-[var(--active-parent)]">Salus</span></span>}
       </div>
 
       <nav className="flex-1 p-4 space-y-3 overflow-y-auto scrollbar-thin">
@@ -194,7 +202,7 @@ export default function Sidebar({
            {!isCollapsed && (
              <div className="flex items-center gap-3">
                  {/* <img src="https://i.pravatar.cc/40?u=clinicuser" alt="User" className="w-9 h-9 rounded-full"/> */}
-                 <div className="w-10 h-10 rounded-full bg-blue-100 border border-blue-200 flex items-center justify-center text-blue-600 font-semibold shadow-sm">
+                 <div className="w-10 h-10 rounded-full bg-[var(--active-parent)] border-2 border-white-200 flex items-center justify-center text-white font-semibold shadow-sm">
                   {user ? getInitials(user.first_name + ' ' + user.last_name) : '??'}
                  </div>
                  <div>

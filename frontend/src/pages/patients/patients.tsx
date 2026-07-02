@@ -50,7 +50,7 @@ export default function Patients() {
       />
 
       <div className="flex flex-col md:flex-row items-center gap-4 justify-between w-full bg-transparent">
-        <div className="group/search flex items-center bg-white border border-slate-200/80 focus-within:border-[var(--active-parent,rgb(99,102,241))] focus-within:ring-4 focus-within:ring-[var(--active-parent,rgb(99,102,241))]/5 rounded-2xl px-4 py-2.5 w-full md:max-w-md transition-all shadow-sm">
+        <div className="group/search flex items-center bg-white border border-slate-200/80 focus-within:border-[var(--active-parent,rgb(99,102,241))] focus-within:ring-4 focus-within:ring-[var(--active-parent,rgb(99,102,241))]/5 rounded-xl px-4 py-2.5 w-full md:max-w-md transition-all shadow-sm">
           <Search size={18} className="text-slate-400 group-focus-within/search:text-[var(--active-parent,rgb(99,102,241))] mr-3 transition-colors" />
           <input 
             type="text" 
@@ -65,16 +65,16 @@ export default function Patients() {
         </div>
         
         <div className="flex items-center gap-2.5 w-full md:w-auto justify-end">
-          <button className="flex items-center gap-2 px-4 py-2.5 bg-white hover:bg-slate-50 border border-slate-200/80 text-slate-600 rounded-2xl text-sm font-semibold shadow-sm transition-all">
+          <button className="flex items-center gap-2 px-4 py-2.5 bg-white hover:bg-slate-50 border border-slate-200/80 text-slate-600 rounded-xl text-sm font-semibold shadow-sm transition-all">
             <Filter size={14} /> Advanced Filter
           </button>
-          <button className="flex items-center gap-2 px-4 py-2.5 bg-white hover:bg-slate-50 border border-slate-200/80 text-slate-600 rounded-2xl text-sm font-semibold shadow-sm transition-all">
+          <button className="flex items-center gap-2 px-4 py-2.5 bg-white hover:bg-slate-50 border border-slate-200/80 text-slate-600 rounded-xl text-sm font-semibold shadow-sm transition-all">
             <ArrowUpDown size={14} /> Sort By
           </button>
         </div>
       </div>
 
-      <div className="w-full bg-white border border-slate-200/60 rounded-3xl shadow-sm overflow-hidden">
+      <div className="w-full bg-white border border-slate-200/60 rounded-xl shadow-sm overflow-hidden">
         <div className="overflow-y-auto overflow-x-auto h-[calc(100vh-325px)] border border-slate-200/60 rounded-lg">
             <table className="w-full text-left text-sm border-separate border-spacing-0">
                 <thead className="sticky top-0 z-10 bg-slate-200">

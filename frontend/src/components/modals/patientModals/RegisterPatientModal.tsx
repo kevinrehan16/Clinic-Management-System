@@ -13,7 +13,7 @@ interface ModalProps {
 export default function RegisterPatientModal({ isOpen, onClose, patientId }: ModalProps) {
   const { data: patient, isLoading } = usePatientDetails(patientId);
   const [errors, setErrors] = useState<Record<string, string[]>>({});
-  const { mutate: register, isPending } = useRegisterPatient();
+  const { mutate: register, isPending: isRegistering } = useRegisterPatient();
   const { mutate: update, isPending: isUpdating } = useUpdatePatient();
   
   const isEditMode = !!patientId;
@@ -201,51 +201,51 @@ export default function RegisterPatientModal({ isOpen, onClose, patientId }: Mod
 
         {/* Footer - Sticky */}
         <div className="px-8 py-4 bg-slate-50 border-t border-slate-100 flex gap-3 justify-end flex-shrink-0">
-          {/* CANCEL BUTTON (Yung pang-close ng modal) */}
-  <button 
-    type="button" 
-    onClick={onClose} 
-    className="px-6 py-2.5 text-sm font-semibold text-slate-500 hover:text-rose-700 hover:bg-rose-100 rounded-xl transition-all flex items-center gap-2"
-  >
-    <Ban size={16} /> Close
-  </button>
+            {/* CANCEL BUTTON (Yung pang-close ng modal) */}
+            <button 
+                type="button" 
+                onClick={onClose} 
+                className="px-6 py-2.5 text-sm font-semibold text-slate-500 hover:text-rose-700 hover:bg-rose-100 rounded-xl transition-all flex items-center gap-2"
+            >
+                <Ban size={16} /> Close
+            </button>
 
-  {/* EDIT / CANCEL EDIT BUTTON */}
-  {isEditMode && (
-    <button 
-      type="button"
-      onClick={() => setIsEditing(!isEditing)}
-      className={`px-6 py-2.5 text-sm font-semibold rounded-xl transition-all flex items-center gap-2 
-      ${isEditing 
-        ? 'text-amber-700 bg-amber-50 hover:bg-amber-100 border border-amber-200' // Amber para sa Cancel Edit
-        : 'text-cyan-600 bg-cyan-50 hover:bg-cyan-100 border border-cyan-200' // Indigo para sa Edit
-      }`}
-    >
-      {isEditing ? (
-        <> <PencilOff size={16} /> Cancel Edit </>
-      ) : (
-        <> <Pencil size={16} /> Edit Profile </>
-      )}
-    </button>
-  )}
+            {/* EDIT / CANCEL EDIT BUTTON */}
+            {isEditMode && (
+                <button 
+                type="button"
+                onClick={() => setIsEditing(!isEditing)}
+                className={`px-6 py-2.5 text-sm font-semibold rounded-xl transition-all flex items-center gap-2 
+                ${isEditing 
+                    ? 'text-amber-700 bg-amber-50 hover:bg-amber-100 border border-amber-200' // Amber para sa Cancel Edit
+                    : 'text-cyan-600 bg-cyan-50 hover:bg-cyan-100 border border-cyan-200' // Indigo para sa Edit
+                }`}
+                >
+                {isEditing ? (
+                    <> <PencilOff size={16} /> Cancel Edit </>
+                ) : (
+                    <> <Pencil size={16} /> Edit Profile </>
+                )}
+                </button>
+            )}
 
-  {/* SUBMIT BUTTON */}
-  <button 
-    type="submit" 
-    form="patient-form"
-    disabled={isPending || (isEditMode && !isEditing)}
-    className={`px-6 py-2.5 text-sm font-semibold text-white rounded-xl shadow-lg transition-all flex items-center gap-2
-      ${(isEditMode && !isEditing) 
-        ? 'bg-slate-300 cursor-not-allowed shadow-none' 
-        : 'bg-[#16a34a] hover:bg-[#119140] shadow-rose-500/20 active:scale-95'
-      }`}
-  >
-    {isPending ? (
-      <> <Loader2 size={16} className="animate-spin" /> Saving... </>
-    ) : (
-      <> <Save size={16} /> {isEditMode ? 'Save Changes' : 'Register Patient'} </>
-    )}
-  </button>
+            {/* SUBMIT BUTTON */}
+            <button 
+                type="submit" 
+                form="patient-form"
+                disabled={isRegistering || isUpdating || (isEditMode && !isEditing)}
+                className={`px-6 py-2.5 text-sm font-semibold text-white rounded-xl shadow-lg transition-all flex items-center gap-2
+                ${(isEditMode && !isEditing) 
+                    ? 'bg-slate-300 cursor-not-allowed shadow-none' 
+                    : 'bg-[#16a34a] hover:bg-[#119140] shadow-rose-500/20 active:scale-95'
+                }`}
+            >
+                {(isRegistering || isUpdating) ? (
+                <> <Loader2 size={16} className="animate-spin" /> Saving... </>
+                ) : (
+                <> <Save size={16} /> {isEditMode ? 'Save Changes' : 'Register Patient'} </>
+                )}
+            </button>
         </div>
       </div>
     </div>

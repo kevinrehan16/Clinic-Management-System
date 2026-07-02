@@ -18,12 +18,13 @@ export const SettingsPanel = ({ isOpen, onClose }: { isOpen: boolean; onClose: (
     { name: 'Blue', bg: '#0284c7', border: '#e2e8f0', color: '#ffffff' },
     { name: 'Green', bg: '#059669', border: '#e2e8f0', color: '#ffffff' },
     { name: 'Red', bg: '#e11d48', border: '#e2e8f0', color: '#ffffff' },
+    { name: 'pink', bg: '#db2777', border: '#e2e8f0', color: '#ffffff' },
     { name: 'Purple', bg: '#7c3aed', border: '#e2e8f0', color: '#ffffff' },
     { name: 'Orange', bg: '#ea580c', border: '#e2e8f0', color: '#ffffff' },
   ];
 
   // Presets para sa Accent/Active Colors
-  const accentPresets = ['#0284c7', '#059669', '#e11d48', '#7c3aed', '#ea580c'];
+  const accentPresets = ['#0284c7', '#059669', '#e11d48', '#db2777', '#7c3aed', '#ea580c'];
 
   return (
     <>
