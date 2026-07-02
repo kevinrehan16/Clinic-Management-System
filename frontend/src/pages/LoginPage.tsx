@@ -15,7 +15,7 @@ const loginSchema = z.object({
 });
 
 export default function LoginPage() {
-  const { loginStateUpdate } = useAuth(); // Gagamitin ang bagong lightweight state updater natin
+  const { fetchUser } = useAuth(); // Gagamitin ang bagong lightweight state updater natin
   const { theme } = useTheme();
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
@@ -34,7 +34,7 @@ export default function LoginPage() {
       });
 
       // Tawagin ang context function para gawing true ang isAuthenticated
-      loginStateUpdate();
+      fetchUser();
 
       // Diretso kaagad sa dashboard
       navigate('/');

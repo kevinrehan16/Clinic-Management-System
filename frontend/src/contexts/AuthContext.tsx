@@ -2,27 +2,34 @@ import { createContext, useContext, useState, useEffect, ReactNode, useCallback 
 import axios from 'axios';
 import apiClient from '../api/axiosInstance'; 
 
-// 1. I-update ang interface para isama ang 'user'
 interface AuthContextType {
-  user: any | null; // Dito natin ilalagay ang user object
+  user: any | null;
   isAuthenticated: boolean;
   isLoading: boolean;
   setIsAuthenticated: (status: boolean) => void;
-  login: (userData: any) => void; // Pinangalanan kong 'login' para mas malinaw
+  fetchUser: () => Promise<void>; // <--- Ito ang idinagdag natin
   logout: () => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const [user, setUser] = useState<any | null>(null); // Added user state
+  const [user, setUser] = useState<any | null>(null);
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState(true);
 
-  // 2. I-update ang login function para tumanggap ng data
-  const login = useCallback((userData: any) => {
-    setUser(userData);
-    setIsAuthenticated(true);
+  // Function para kunin ang user profile (reusable)
+  const fetchUser = useCallback(async () => {
+    try {
+      const response = await apiClient.get('users/auth/me/');
+      setUser(response.data);
+      setIsAuthenticated(true);
+    } catch (error) {
+      setUser(null);
+      setIsAuthenticated(false);
+    } finally {
+      setIsLoading(false);
+    }
   }, []);
 
   const logout = useCallback(async () => {
@@ -31,34 +38,17 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     } catch (error) {
       console.error("Backend logout failed:", error);
     } finally {
-      setUser(null); // Linisin ang user data
+      setUser(null);
       setIsAuthenticated(false);
     }
   }, []);
 
   useEffect(() => {
-    const checkAuthStatus = async () => {
-      try {
-        // 3. Kunin ang response mula sa backend
-        const response = await apiClient.get('users/auth/me/');
-        
-        // I-assume natin na ang API mo ay nagbabalik ng user data sa response.data
-        setUser(response.data); 
-        setIsAuthenticated(true);
-      } catch (error) {
-        if (axios.isCancel(error)) return;
-        setUser(null);
-        setIsAuthenticated(false);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    checkAuthStatus();
-  }, []);
+    fetchUser(); // Tatawagin ito pag-load ng app
+  }, [fetchUser]);
 
   return (
-    <AuthContext.Provider value={{ user, isAuthenticated, isLoading, setIsAuthenticated, login, logout }}>
+    <AuthContext.Provider value={{ user, isAuthenticated, isLoading, setIsAuthenticated, fetchUser, logout }}>
       {children}
     </AuthContext.Provider>
   );
