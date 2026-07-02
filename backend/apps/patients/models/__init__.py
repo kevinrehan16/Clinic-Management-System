@@ -1,3 +1,3 @@
-from .patient_records import PatientMedicalHistory, PatientAllergy
+from .patient_records import PatientMedicalHistory, PatientAllergy, PatientProfile
 
-__all__ = ['PatientMedicalHistory', 'PatientAllergy']
+__all__ = ['PatientMedicalHistory', 'PatientAllergy', 'PatientProfile']

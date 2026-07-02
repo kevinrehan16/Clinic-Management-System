@@ -75,7 +75,7 @@ export default function Patients() {
 
       <div className="w-full bg-white border border-slate-200/60 rounded-3xl shadow-sm overflow-hidden">
         {/* Container: Dito natin ilalagay ang limit ng height at scroll */}
-        <div className="overflow-y-auto overflow-x-auto max-h-[355px] border border-slate-200/60 rounded-lg">
+        <div className="overflow-y-auto overflow-x-auto h-[calc(100vh-355px)] border border-slate-200/60 rounded-lg">
             <table className="w-full text-left text-sm border-separate border-spacing-0">
                 {/* Ginawa nating compact ang tag na ito para iwas hydration error */}
                 <thead className="sticky top-0 z-10 bg-slate-50"><tr className="text-slate-500 uppercase tracking-wider text-[10px] font-bold border-b border-slate-200/60">

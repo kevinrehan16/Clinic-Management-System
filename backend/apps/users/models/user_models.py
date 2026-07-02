@@ -23,6 +23,7 @@ class User(AbstractUser, BaseModel):
     address = models.TextField(blank=True, null=True)
     avatar = models.ImageField(upload_to='avatars/', blank=True, null=True)
 
+    # Siguraduhin na ang email ay part ng REQUIRED_FIELDS kung gagamitin mo ito bilang identifier
     REQUIRED_FIELDS = ['email', 'role']
 
     class Meta:
@@ -33,58 +34,5 @@ class User(AbstractUser, BaseModel):
     def __str__(self):
         return f"{self.get_full_name() or self.username} ({self.get_role_display()})"
 
-
-# class DoctorProfile(BaseModel):
-#     """
-#     Spesipikong impormasyon para lamang sa mga Doctor.
-#     Naka-link sa Main User via OneToOneField.
-#     """
-#     user = models.OneToOneField(
-#         User, 
-#         on_delete=models.CASCADE, 
-#         related_name='doctor_profile',
-#         limit_choices_to={'role': User.Roles.DOCTOR}
-#     )
-#     license_number = models.CharField(max_length=50, unique=True)
-#     specialization = models.CharField(max_length=100, db_index=True)
-#     ptr_number = models.CharField(max_length=50, blank=True, null=True, verbose_name="PTR Number")
-#     clinic_hours = models.JSONField(default=dict, help_text="e.g., {'Monday': '9AM-5PM'}")
-#     is_active_practitioner = models.BooleanField(default=True)
-
-#     class Meta:
-#         db_table = 'doctor_profiles'
-
-#     def __str__(self):
-#         return f"Dr. {self.user.get_full_name()} - {self.specialization}"
-
-
-class PatientProfile(BaseModel):
-    """
-    Spesipikong impormasyon para lamang sa mga Pasyente.
-    """
-    BLOOD_TYPES = [
-        ('A+', 'A+'), ('A-', 'A-'),
-        ('B+', 'B+'), ('B-', 'B-'),
-        ('AB+', 'AB+'), ('AB-', 'AB-'),
-        ('O+', 'O+'), ('O-', 'O-'),
-        ('UNKNOWN', 'Unknown')
-    ]
-
-    user = models.OneToOneField(
-        User, 
-        on_delete=models.CASCADE, 
-        related_name='patient_profile',
-        limit_choices_to={'role': User.Roles.PATIENT}
-    )
-    birth_date = models.DateField(null=True, blank=True)
-    gender = models.CharField(max_length=10, choices=[('MALE', 'Male'), ('FEMALE', 'Female'), ('OTHER', 'Other')])
-    blood_type = models.CharField(max_length=7, choices=BLOOD_TYPES, default='UNKNOWN')
-    emergency_contact_name = models.CharField(max_length=100, blank=True, null=True)
-    emergency_contact_phone = models.CharField(max_length=15, blank=True, null=True)
-    medical_notes = models.TextField(blank=True, null=True, help_text="Allergies or chronic conditions")
-
-    class Meta:
-        db_table = 'patient_profiles'
-
-    def __str__(self):
-        return f"Patient: {self.user.get_full_name()}"
+# Note: Inalis na natin ang PatientProfile dito para maiwasan ang migration errors.
+# Siguraduhin na ang PatientProfile ay define lang sa loob ng apps/patients/models/

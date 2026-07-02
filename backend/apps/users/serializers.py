@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
 from django.db import transaction
-from users.models import PatientProfile
+from patients.models.patient_records import PatientProfile
 
 User = get_user_model()
 
