@@ -150,13 +150,19 @@ export default function Patients() {
                         </td>
                         <td className="px-6 py-4 text-center">
                           <div className="flex items-center justify-center">
-                            <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wide border transition-colors ${
+                            <span className={`inline-flex items-center justify-center gap-1.5 w-22 px-3 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-wider border transition-all duration-300 ${
                               patient.is_active 
-                                ? 'bg-emerald-50 border-emerald-200 text-emerald-700' 
+                                ? 'bg-emerald-50 border-emerald-200 text-emerald-700 shadow-sm' 
                                 : 'bg-slate-50 border-slate-200 text-slate-500'
                             }`}>
-                              {/* Indicator Dot */}
-                              <span className={`w-1.5 h-1.5 rounded-full mb-0.5 ${patient.is_active ? 'bg-emerald-500' : 'bg-slate-400'}`}></span>
+                              {/* Pulsing Indicator Dot */}
+                              <span className="relative flex h-2 w-2">
+                                {patient.is_active && (
+                                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                                )}
+                                <span className={`relative inline-flex rounded-full h-2 w-2 ${patient.is_active ? 'bg-emerald-500' : 'bg-slate-400'}`}></span>
+                              </span>
+                              
                               {patient.is_active ? 'Active' : 'Inactive'}
                             </span>
                           </div>
@@ -165,7 +171,7 @@ export default function Patients() {
                           <button 
                             onClick={() => handleViewProfile(patient.id)} // Ipasa mo yung ID ng patient
                             className="inline-flex items-center gap-2 px-2 py-1.5 rounded-lg text-xs font-medium 
-                            text-slate-600 bg-slate-100 hover:bg-[#e11d48] hover:text-white 
+                            text-slate-600 bg-slate-100 hover:bg-cyan-500 hover:text-white 
                             transition-all duration-200 active:scale-95 hover:cursor-pointer"
                           >
                             <Eye size={14} />
