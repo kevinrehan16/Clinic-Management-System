@@ -43,7 +43,11 @@ class PatientSerializer(serializers.ModelSerializer):
         fields = [
             'id', 'birth_date', 'gender', 'medical_notes', 'blood_type', 
             'emergency_contact_name', 'emergency_contact_phone',
-            'first_name', 'last_name', 'phone_number', 'email', 'avatar', 'is_active', 'address', 'username'
+            'first_name', 'last_name', 'phone_number', 'email', 'avatar', 'is_active', 'address', 'username',
+            # --- ANG MGA BAGONG FIELDS MO ---
+            'suffix', 'civil_status', 'occupation', 'nationality', 'land_line',
+            'address_info', 'region', 'province', 'city', 'brgy',
+            'phil_health', 'senior_id', 'hmo_provider', 'hmo_accnum', 'emergency_relationship'
         ]
 
     def update(self, instance, validated_data):

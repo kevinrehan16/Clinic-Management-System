@@ -31,11 +31,36 @@ class PatientRegistrationSerializer(serializers.ModelSerializer):
     phone_number = serializers.CharField(required=False, allow_blank=True, default='')
     address = serializers.CharField(required=False, allow_blank=True)
 
+    # ⚠️ MGA BAGONG FIELDS NA KAILANGANG IDEKLARA PARA HINDI TANGGALIN NI DRF:
+    suffix = serializers.CharField(required=False, allow_blank=True, default='')
+    civil_status = serializers.CharField(required=False, allow_blank=True, default='')
+    occupation = serializers.CharField(required=False, allow_blank=True, default='')
+    nationality = serializers.CharField(required=False, allow_blank=True, default='Filipino')
+    land_line = serializers.CharField(required=False, allow_blank=True, default='')
+    address_info = serializers.CharField(required=False, allow_blank=True, default='')
+    region = serializers.CharField(required=False, allow_blank=True, default='')
+    province = serializers.CharField(required=False, allow_blank=True, default='')
+    city = serializers.CharField(required=False, allow_blank=True, default='')
+    brgy = serializers.CharField(required=False, allow_blank=True, default='')
+    phil_health = serializers.CharField(required=False, allow_blank=True, default='')
+    senior_id = serializers.CharField(required=False, allow_blank=True, default='')
+    hmo_provider = serializers.CharField(required=False, allow_blank=True, default='')
+    hmo_accnum = serializers.CharField(required=False, allow_blank=True, default='')
+    emergency_contact_name = serializers.CharField(required=False, allow_blank=True, default='')
+    emergency_contact_phone = serializers.CharField(required=False, allow_blank=True, default='')
+    emergency_relationship = serializers.CharField(required=False, allow_blank=True, default='')
+
     class Meta:
         model = User
         fields = [
             'username', 'email', 'password', 'password_confirm', 
-            'first_name', 'last_name', 'birth_date', 'gender', 'blood_type', 'phone_number', 'address'
+            'first_name', 'last_name', 'birth_date', 'gender', 'blood_type', 'phone_number', 'address',
+            
+            # ⚠️ ISAMA SILA DITO SA META FIELDS PARA PAYAGAN MAKIHALUBILO SA VALIDATED_DATA:
+            'suffix', 'civil_status', 'occupation', 'nationality', 'land_line',
+            'address_info', 'region', 'province', 'city', 'brgy',
+            'phil_health', 'senior_id', 'hmo_provider', 'hmo_accnum',
+            'emergency_contact_name', 'emergency_contact_phone', 'emergency_relationship'
         ]
 
     def validate(self, attrs):
@@ -44,16 +69,35 @@ class PatientRegistrationSerializer(serializers.ModelSerializer):
         return attrs
 
     def create(self, validated_data):
-        # Tanggalin ang mga pang-confirm at profile fields para hindi mag-error sa create_user()
+        # Tanggalin ang mga pang-confirm para hindi mag-error sa create_user()
         validated_data.pop('password_confirm', None)
         
-        # Sigurado nang may laman ito dahil dumaan sa validation sa taas
+        # 1. Hatiin ang mga fields para sa PatientProfile (Gamit ang .pop())
         birth_date = validated_data.pop('birth_date')
         gender = validated_data.pop('gender', '')
         blood_type = validated_data.pop('blood_type', '')
         
+        # --- KUNIN ANG MGA BAGONG FIELDS (May laman na ito ngayon!) ---
+        suffix = validated_data.pop('suffix', '')
+        civil_status = validated_data.pop('civil_status', '')
+        occupation = validated_data.pop('occupation', '')
+        nationality = validated_data.pop('nationality', 'Filipino')
+        land_line = validated_data.pop('land_line', '')
+        address_info = validated_data.pop('address_info', '')
+        region = validated_data.pop('region', '')
+        province = validated_data.pop('province', '')
+        city = validated_data.pop('city', '')
+        brgy = validated_data.pop('brgy', '')
+        phil_health = validated_data.pop('phil_health', '')
+        senior_id = validated_data.pop('senior_id', '')
+        hmo_provider = validated_data.pop('hmo_provider', '')
+        hmo_accnum = validated_data.pop('hmo_accnum', '')
+        emergency_contact_name = validated_data.pop('emergency_contact_name', '')
+        emergency_contact_phone = validated_data.pop('emergency_contact_phone', '')
+        emergency_relationship = validated_data.pop('emergency_relationship', '')
+        
         with transaction.atomic():
-            # 1. Gagawa muna ng User instance
+            # 2. Gagawa muna ng User instance (Ang matitira sa validated_data ay para sa User na lang)
             user = User.objects.create_user(
                 username=validated_data['username'],
                 email=validated_data['email'],
@@ -65,19 +109,38 @@ class PatientRegistrationSerializer(serializers.ModelSerializer):
                 role=User.Roles.PATIENT 
             )
             
-            # 2. Awtomatikong ikakabit at gagawan ng PatientProfile
+            # 3. I-save na lahat ng fields sa PatientProfile
             PatientProfile.objects.create(
                 user=user,
                 birth_date=birth_date,
                 gender=gender,
-                blood_type=blood_type
+                blood_type=blood_type,
+                
+                # --- IPASA ANG MGA BAGONG FIELDS DITO ---
+                suffix=suffix,
+                civil_status=civil_status,
+                occupation=occupation,
+                nationality=nationality,
+                land_line=land_line,
+                address_info=address_info,
+                region=region,
+                province=province,
+                city=city,
+                brgy=brgy,
+                phil_health=phil_health,
+                senior_id=senior_id,
+                hmo_provider=hmo_provider,
+                hmo_accnum=hmo_accnum,
+                emergency_contact_name=emergency_contact_name,
+                emergency_contact_phone=emergency_contact_phone,
+                emergency_relationship=emergency_relationship
             )
             
         return user
 
 
 # ==========================================
-# 3. SERIALIZER PARA SA BUONG PROFILE VIEW (USER + PROFILE)
+# 3. SERIALIZER PARA SA BUONG PROFILE VIEW AND UPDATE (USER + PROFILE)
 # ==========================================
 class UserProfileSerializer(serializers.ModelSerializer):
     # Ginawa nating read_only=False ang PatientProfileSerializer para makatanggap ng data pabalik

@@ -26,13 +26,41 @@ class PatientProfile(BaseModel):
     blood_type = models.CharField(max_length=7, choices=BLOOD_TYPES, default='UNKNOWN')
     emergency_contact_name = models.CharField(max_length=100, blank=True, null=True)
     emergency_contact_phone = models.CharField(max_length=15, blank=True, null=True)
+    emergency_relationship = models.CharField(max_length=50, blank=True, null=True)
     medical_notes = models.TextField(blank=True, null=True, help_text="Allergies or chronic conditions")
+    suffix = models.CharField(max_length=10, blank=True, null=True)
+    civil_status = models.CharField(
+        max_length=20, 
+        choices=[
+            ('Single', 'Single'),
+            ('Married', 'Married'),
+            ('Widowed', 'Widowed'),
+            ('Divorced', 'Divorced'),
+            ('Separated', 'Separated')
+        ],
+        blank=True, null=True
+    )
+    occupation = models.CharField(max_length=100, blank=True, null=True)
+    nationality = models.CharField(max_length=50, default='Filipino', blank=True, null=True)
+    land_line = models.CharField(max_length=20, blank=True, null=True)
+    # --- PHILIPPINE ADDRESS SYSTEM ---
+    address_info = models.CharField(max_length=255, blank=True, null=True) # House No., Street Name
+    brgy = models.CharField(max_length=100, blank=True, null=True)
+    city = models.CharField(max_length=100, blank=True, null=True)
+    province = models.CharField(max_length=100, blank=True, null=True)
+    region = models.CharField(max_length=100, blank=True, null=True)
+    # --- GOVERNMENT & INSURANCE IDs ---
+    phil_health = models.CharField(max_length=20, blank=True, null=True)
+    senior_id = models.CharField(max_length=20, blank=True, null=True)
+    hmo_provider = models.CharField(max_length=100, blank=True, null=True) # e.g., Maxicare, MediCard
+    hmo_accnum = models.CharField(max_length=50, blank=True, null=True) # HMO Account/Policy Number
+
 
     class Meta:
         db_table = 'patient_profiles'
 
     def __str__(self):
-        return f"Patient: {self.user.get_full_name()}"
+        return f"{self.user.get_full_name()} {self.suffix or ''}".strip()
 
 
 class PatientMedicalHistory(BaseModel):
