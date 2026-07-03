@@ -2,8 +2,9 @@ import React from 'react';
 import { 
   Users, Activity, DollarSign, Bed, Calendar, ArrowUpRight, ArrowDownRight, 
   AlertCircle, Clock, CheckCircle2, Hospital, Stethoscope, Syringe,
-  FileText, Droplet, Truck, ShieldCheck, Wallet, UserCheck, Pill, MoreVertical
+  FileText, Droplet, Truck, ShieldCheck, Wallet, UserCheck, Pill, MoreVertical, LayoutDashboard 
 } from 'lucide-react';
+import ModuleHeader from '../../components/ModuleHeader';
 
 export default function AdminDashboard() {
   // =========================================================================
@@ -111,24 +112,27 @@ export default function AdminDashboard() {
   ];
 
   return (
-    <div className="p-4 md:p-8 space-y-6 bg-slate-50/60 min-h-screen animate-in fade-in duration-500">
+    <div className="px-6 py-4 space-y-6 bg-slate-50/60 min-h-screen animate-in fade-in duration-500">
       
       {/* =========================================================================
           HEADER & COMMAND PANEL CONTROLS
          ========================================================================= */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div>
-          <h1 className="text-2xl font-black text-slate-800 tracking-tight">Hospital Enterprise Command Center</h1>
-          <p className="text-slate-500 text-xs font-semibold mt-0.5 uppercase tracking-wider">Unified Admin Portal • Live Clinical & Financial Telemetry</p>
-        </div>
-        <div className="flex gap-2.5">
-          <button className="px-4 py-2 bg-white border border-slate-200 text-slate-600 rounded-xl text-xs font-bold shadow-sm hover:bg-slate-50 transition-all flex items-center gap-2 uppercase tracking-wide">
-            <FileText size={14} /> System Audit Logs
-          </button>
-          <button className="px-5 py-2 bg-[var(--active-parent)] text-white rounded-xl text-xs font-bold shadow-lg shadow-[var(--active-parent)]/20 hover:opacity-90 transition-all flex items-center gap-2 uppercase tracking-wide">
-            <Calendar size={14} /> Operations Live
-          </button>
-        </div>
+        <ModuleHeader
+          title="Hospital Enterprise Command Center"
+          description="Unified Admin Portal • Live Clinical & Financial Telemetry"
+          icon={<LayoutDashboard size={24} className="text-[var(--active-parent)]" />}
+          actions={
+            <div className="flex gap-2.5">
+              <button className="px-4 py-2 bg-white border border-slate-200 text-slate-600 rounded-xl text-xs font-bold shadow-sm hover:bg-slate-50 transition-all flex items-center gap-2 uppercase tracking-wide">
+                <FileText size={16} /> System Audit Logs
+              </button>
+              <button className="px-5 py-2 bg-[var(--active-parent)] text-white rounded-xl text-xs font-bold shadow-lg shadow-[var(--active-parent)]/20 hover:opacity-90 transition-all flex items-center gap-2 uppercase tracking-wide">
+                <Calendar size={16} /> Operations Live
+              </button>
+            </div>
+          }
+        />
       </div>
 
       {/* =========================================================================
