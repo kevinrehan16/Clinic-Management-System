@@ -1,15 +1,23 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap');
+
 @import "tailwindcss";
 @tailwind components;
 @tailwind utilities;
 
 /* Custom Reset/Base Styles */
-body {
-  @apply bg-slate-50 text-slate-900;
-  margin: 0;
-  padding: 0;
-  font-family: sans-serif;
-}
+@layer base {
+  html, body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Inter', sans-serif !important;
+  }
+  
+  /* Para masiguro na gagana ang font-heading na class natin */
+  .font-heading {
+    font-family: 'Plus Jakarta Sans', sans-serif !important;
+  }
 
-button {
-  @apply cursor-pointer;
+  button {
+    @apply cursor-pointer;
+  }
 }

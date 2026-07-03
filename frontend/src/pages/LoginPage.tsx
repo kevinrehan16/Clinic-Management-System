@@ -59,7 +59,7 @@ export default function LoginPage() {
         </div>
         
         <div className="space-y-4">
-          <h1 className="text-5xl font-extrabold leading-tight">Patient care, managed with precision.</h1>
+          <h1 className="font-heading text-5xl font-extrabold leading-tight">Patient care, managed with precision.</h1>
           <p className="text-white/80 text-lg font-medium max-w-md">
             The most reliable platform for modern clinics. Secure, scalable, and built for healthcare professionals.
           </p>
@@ -76,7 +76,7 @@ export default function LoginPage() {
           className="w-full max-w-md bg-white p-10 rounded-2xl shadow-xl border border-slate-200"
         >
           <div className="mb-8">
-            <h2 className="text-3xl font-bold text-slate-900">Welcome Back</h2>
+            <h2 className="font-heading text-3xl font-bold text-slate-900">Welcome Back</h2>
             <p className="text-slate-500 mt-2">Sign in to your professional portal.</p>
           </div>
 

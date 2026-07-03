@@ -152,225 +152,219 @@ export default function RegisterPatientModal({ isOpen, onClose, patientId }: Mod
               {/* ------------------------------------------
                   TAB 1: PERSONAL INFORMATION
                  ------------------------------------------ */}
-              {activeTab === 'personal' && (
-                <div className="space-y-6 animate-in fade-in duration-200">
-                  <div className="flex items-center gap-4 w-full">
-                    <h3 className="text-xs font-extrabold text-slate-400 uppercase tracking-wider whitespace-nowrap">Account Credentials</h3>
-                    <div className="h-px flex-grow bg-slate-200" />
-                  </div>
-                  
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                    <InputField 
-                      label="Username" name="username" error={errors.username} 
-                      defaultValue={patient?.username || ''} readOnly={!!patientId}
-                      icon={<User size={15}/>} placeholder="ex. ivyquinones" 
-                    />
-                    <InputField 
-                      label="Email Address" name="email" error={errors.email} type="email"
-                      defaultValue={patient?.email || ''} readOnly={readOnlyCondition}
-                      icon={<Mail size={15}/>} placeholder="ivyquinones@example.com" 
-                    />
-                    {!isEditMode && (
-                      <>
-                        <InputField label="Password" name="password" error={errors.password} type="password" icon={<Lock size={15}/>} placeholder="••••••••" />
-                        <InputField label="Confirm Password" name="password_confirm" error={errors.password_confirm} type="password" icon={<LockKeyhole  size={15}/>} placeholder="••••••••" />
-                      </>
-                    )}
-                  </div>
-
-                  <div className="flex items-center gap-4 w-full pt-2">
-                    <h3 className="text-xs font-extrabold text-slate-400 uppercase tracking-wider whitespace-nowrap">Bio Identity Data</h3>
-                    <div className="h-px flex-grow bg-slate-200" />
-                  </div>
-
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-                    <InputField 
-                      label="First Name" name="first_name" error={errors.first_name} 
-                      defaultValue={patient?.first_name || ''} readOnly={readOnlyCondition}
-                      icon={<User size={15}/>} placeholder="First Name" 
-                    />
-                    <InputField 
-                      label="Last Name" name="last_name" error={errors.last_name} 
-                      defaultValue={patient?.last_name || ''} readOnly={readOnlyCondition}
-                      icon={<User size={15}/>} placeholder="Last Name" 
-                    />
-                    <InputField 
-                      label="Suffix (Optional)" name="suffix" error={errors.suffix} 
-                      defaultValue={patient?.suffix || ''} readOnly={readOnlyCondition}
-                      icon={<User size={15}/>} placeholder="e.g. Jr., III" 
-                    />
-                    <InputField 
-                      label="Birth Date" name="birth_date" error={errors.birth_date} type="date"
-                      defaultValue={patient?.birth_date || ''} readOnly={readOnlyCondition}
-                      icon={<Calendar size={15}/>} 
-                    />
-                    <SelectField 
-                      label="Gender" name="gender" error={errors.gender}
-                      defaultValue={patient?.gender || ''} readOnly={readOnlyCondition}
-                      options={[{ label: 'MALE', value: 'MALE' }, { label: 'FEMALE', value: 'FEMALE' }]} 
-                    />
-                    <SelectField 
-                      label="Civil Status" name="civil_status" error={errors.civil_status}
-                      defaultValue={patient?.civil_status || ''} readOnly={readOnlyCondition}
-                      options={[
-                        { label: 'Single', value: 'Single' }, { label: 'Married', value: 'Married' },
-                        { label: 'Widowed', value: 'Widowed' }, { label: 'Separated', value: 'Separated' }
-                      ]} 
-                    />
-                    <InputField 
-                      label="Nationality" name="nationality" error={errors.nationality} 
-                      defaultValue={patient?.nationality || 'Filipino'} readOnly={readOnlyCondition}
-                      icon={<Globe size={15}/>} placeholder="Filipino" 
-                    />
-                    <InputField 
-                      label="Occupation" name="occupation" error={errors.occupation} 
-                      defaultValue={patient?.occupation || ''} readOnly={readOnlyCondition}
-                      icon={<Briefcase size={15}/>} placeholder="e.g. Accountant" 
-                    />
-                    <SelectField 
-                      label="Blood Type" name="blood_type" error={errors.blood_type}
-                      defaultValue={patient?.blood_type || ''} readOnly={readOnlyCondition}
-                      options={[
-                        { label: 'A+', value: 'A+' }, { label: 'A-', value: 'A-' },
-                        { label: 'B+', value: 'B+' }, { label: 'B-', value: 'B-' },
-                        { label: 'AB+', value: 'AB+' }, { label: 'AB-', value: 'AB-' },
-                        { label: 'O+', value: 'O+' }, { label: 'O-', value: 'O-' }
-                      ]} 
-                    />
-                  </div>
+              <div className={`space-y-6 animate-in fade-in duration-200 ${activeTab === 'personal' ? 'block' : 'hidden'}`}>
+                <div className="flex items-center gap-4 w-full">
+                  <h3 className="text-xs font-extrabold text-slate-400 uppercase tracking-wider whitespace-nowrap">Account Credentials</h3>
+                  <div className="h-px flex-grow bg-slate-200" />
                 </div>
-              )}
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                  <InputField 
+                    label="Username" name="username" error={errors.username} 
+                    defaultValue={patient?.username || ''} readOnly={!!patientId}
+                    icon={<User size={15}/>} placeholder="ex. johndoe" 
+                  />
+                  <InputField 
+                    label="Email Address" name="email" error={errors.email} type="email"
+                    defaultValue={patient?.email || ''} readOnly={readOnlyCondition}
+                    icon={<Mail size={15}/>} placeholder="johndoe@example.com" 
+                  />
+                  {!isEditMode && (
+                    <>
+                      <InputField label="Password" name="password" error={errors.password} type="password" icon={<Lock size={15}/>} placeholder="••••••••" />
+                      <InputField label="Confirm Password" name="password_confirm" error={errors.password_confirm} type="password" icon={<LockKeyhole  size={15}/>} placeholder="••••••••" />
+                    </>
+                  )}
+                </div>
+
+                <div className="flex items-center gap-4 w-full pt-2">
+                  <h3 className="text-xs font-extrabold text-slate-400 uppercase tracking-wider whitespace-nowrap">Bio Identity Data</h3>
+                  <div className="h-px flex-grow bg-slate-200" />
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+                  <InputField 
+                    label="First Name" name="first_name" error={errors.first_name} 
+                    defaultValue={patient?.first_name || ''} readOnly={readOnlyCondition}
+                    icon={<User size={15}/>} placeholder="First Name" 
+                  />
+                  <InputField 
+                    label="Last Name" name="last_name" error={errors.last_name} 
+                    defaultValue={patient?.last_name || ''} readOnly={readOnlyCondition}
+                    icon={<User size={15}/>} placeholder="Last Name" 
+                  />
+                  <InputField 
+                    label="Suffix (Optional)" name="suffix" error={errors.suffix} 
+                    defaultValue={patient?.suffix || ''} readOnly={readOnlyCondition}
+                    icon={<User size={15}/>} placeholder="e.g. Jr., III" 
+                  />
+                  <InputField 
+                    label="Birth Date" name="birth_date" error={errors.birth_date} type="date"
+                    defaultValue={patient?.birth_date || ''} readOnly={readOnlyCondition}
+                    icon={<Calendar size={15}/>} 
+                  />
+                  <SelectField 
+                    label="Gender" name="gender" error={errors.gender}
+                    defaultValue={patient?.gender || ''} readOnly={readOnlyCondition}
+                    options={[{ label: 'MALE', value: 'MALE' }, { label: 'FEMALE', value: 'FEMALE' }]} 
+                  />
+                  <SelectField 
+                    label="Civil Status" name="civil_status" error={errors.civil_status}
+                    defaultValue={patient?.civil_status || ''} readOnly={readOnlyCondition}
+                    options={[
+                      { label: 'Single', value: 'Single' }, { label: 'Married', value: 'Married' },
+                      { label: 'Widowed', value: 'Widowed' }, { label: 'Separated', value: 'Separated' }
+                    ]} 
+                  />
+                  <InputField 
+                    label="Nationality" name="nationality" error={errors.nationality} 
+                    defaultValue={patient?.nationality || 'Filipino'} readOnly={readOnlyCondition}
+                    icon={<Globe size={15}/>} placeholder="Filipino" 
+                  />
+                  <InputField 
+                    label="Occupation" name="occupation" error={errors.occupation} 
+                    defaultValue={patient?.occupation || ''} readOnly={readOnlyCondition}
+                    icon={<Briefcase size={15}/>} placeholder="e.g. Accountant" 
+                  />
+                  <SelectField 
+                    label="Blood Type" name="blood_type" error={errors.blood_type}
+                    defaultValue={patient?.blood_type || ''} readOnly={readOnlyCondition}
+                    options={[
+                      { label: 'A+', value: 'A+' }, { label: 'A-', value: 'A-' },
+                      { label: 'B+', value: 'B+' }, { label: 'B-', value: 'B-' },
+                      { label: 'AB+', value: 'AB+' }, { label: 'AB-', value: 'AB-' },
+                      { label: 'O+', value: 'O+' }, { label: 'O-', value: 'O-' }
+                    ]} 
+                  />
+                </div>
+              </div>
 
               {/* ------------------------------------------
                   TAB 2: CONTACTS & LOCATION
                  ------------------------------------------ */}
-              {activeTab === 'contact' && (
-                <div className="space-y-6 animate-in fade-in duration-200">
-                  <div className="flex items-center gap-4 w-full">
-                    <h3 className="text-xs font-extrabold text-slate-400 uppercase tracking-wider whitespace-nowrap">Telecommunication Gateway</h3>
-                    <div className="h-px flex-grow bg-slate-200" />
-                  </div>
-
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                    <InputField 
-                      label="Mobile Number" name="phone_number" error={errors.phone_number} 
-                      defaultValue={patient?.phone_number || ''} readOnly={readOnlyCondition}
-                      icon={<Phone size={15}/>} placeholder="09XXXXXXXXX"
-                    />
-                    <InputField 
-                      label="Landline Number" name="land_line" error={errors.land_line} 
-                      defaultValue={patient?.land_line || ''} readOnly={readOnlyCondition}
-                      icon={<Phone size={15}/>} placeholder="e.g. 046XXXXXXX"
-                    />
-                  </div>
-
-                  <div className="flex items-center gap-4 w-full pt-2">
-                    <h3 className="text-xs font-extrabold text-slate-400 uppercase tracking-wider whitespace-nowrap">Geographical Core Address</h3>
-                    <div className="h-px flex-grow bg-slate-200" />
-                  </div>
-
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                    <div className="md:col-span-2">
-                      <InputField 
-                        label="Primary Address (Baseline)" name="address" error={errors.address} 
-                        defaultValue={patient?.address || ''} readOnly={readOnlyCondition}
-                        icon={<MapPin size={15}/>} placeholder="Street Name, Subd, Brgy, City, Province"
-                      />
-                    </div>
-                    <div className="md:col-span-2">
-                      <InputField 
-                        label="Address Info (House No./Bldg/Unit/Floor)" name="address_info" error={errors.address_info} 
-                        defaultValue={patient?.address_info || ''} readOnly={readOnlyCondition}
-                        icon={<Building size={15}/>} placeholder="Blk 1 Lot 2, Phase 3, Golden City"
-                      />
-                    </div>
-                    <InputField 
-                      label="Barangay" name="brgy" error={errors.brgy} 
-                      defaultValue={patient?.brgy || ''} readOnly={readOnlyCondition}
-                      icon={<MapPin size={15}/>} placeholder="e.g. Anabu II-F"
-                    />
-                    <InputField 
-                      label="City / Municipality" name="city" error={errors.city} 
-                      defaultValue={patient?.city || ''} readOnly={readOnlyCondition}
-                      icon={<MapPin size={15}/>} placeholder="e.g. Imus"
-                    />
-                    <InputField 
-                      label="Province" name="province" error={errors.province} 
-                      defaultValue={patient?.province || ''} readOnly={readOnlyCondition}
-                      icon={<MapPin size={15}/>} placeholder="e.g. Cavite"
-                    />
-                    <InputField 
-                      label="Region" name="region" error={errors.region} 
-                      defaultValue={patient?.region || ''} readOnly={readOnlyCondition}
-                      icon={<MapPin size={15}/>} placeholder="e.g. IV-A (CALABARZON)"
-                    />
-                  </div>
+              <div className={`space-y-6 animate-in fade-in duration-200 ${activeTab === 'contact' ? 'block' : 'hidden'}`}>
+                <div className="flex items-center gap-4 w-full">
+                  <h3 className="text-xs font-extrabold text-slate-400 uppercase tracking-wider whitespace-nowrap">Telecommunication Gateway</h3>
+                  <div className="h-px flex-grow bg-slate-200" />
                 </div>
-              )}
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                  <InputField 
+                    label="Mobile Number" name="phone_number" error={errors.phone_number} 
+                    defaultValue={patient?.phone_number || ''} readOnly={readOnlyCondition}
+                    icon={<Phone size={15}/>} placeholder="09XXXXXXXXX"
+                  />
+                  <InputField 
+                    label="Landline Number" name="land_line" error={errors.land_line} 
+                    defaultValue={patient?.land_line || ''} readOnly={readOnlyCondition}
+                    icon={<Phone size={15}/>} placeholder="e.g. 046XXXXXXX"
+                  />
+                </div>
+
+                <div className="flex items-center gap-4 w-full pt-2">
+                  <h3 className="text-xs font-extrabold text-slate-400 uppercase tracking-wider whitespace-nowrap">Geographical Core Address</h3>
+                  <div className="h-px flex-grow bg-slate-200" />
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                  <div className="md:col-span-2">
+                    <InputField 
+                      label="Primary Address (Baseline)" name="address" error={errors.address} 
+                      defaultValue={patient?.address || ''} readOnly={readOnlyCondition}
+                      icon={<MapPin size={15}/>} placeholder="Street Name, Subd, Brgy, City, Province"
+                    />
+                  </div>
+                  <div className="md:col-span-2">
+                    <InputField 
+                      label="Address Info (House No./Bldg/Unit/Floor)" name="address_info" error={errors.address_info} 
+                      defaultValue={patient?.address_info || ''} readOnly={readOnlyCondition}
+                      icon={<Building size={15}/>} placeholder="Blk 1 Lot 2, Phase 3, Golden City"
+                    />
+                  </div>
+                  <InputField 
+                    label="Barangay" name="brgy" error={errors.brgy} 
+                    defaultValue={patient?.brgy || ''} readOnly={readOnlyCondition}
+                    icon={<MapPin size={15}/>} placeholder="e.g. Anabu II-F"
+                  />
+                  <InputField 
+                    label="City / Municipality" name="city" error={errors.city} 
+                    defaultValue={patient?.city || ''} readOnly={readOnlyCondition}
+                    icon={<MapPin size={15}/>} placeholder="e.g. Imus"
+                  />
+                  <InputField 
+                    label="Province" name="province" error={errors.province} 
+                    defaultValue={patient?.province || ''} readOnly={readOnlyCondition}
+                    icon={<MapPin size={15}/>} placeholder="e.g. Cavite"
+                  />
+                  <InputField 
+                    label="Region" name="region" error={errors.region} 
+                    defaultValue={patient?.region || ''} readOnly={readOnlyCondition}
+                    icon={<MapPin size={15}/>} placeholder="e.g. IV-A (CALABARZON)"
+                  />
+                </div>
+              </div>
 
               {/* ------------------------------------------
                   TAB 3: INSURANCE & EMERGENCY
                  ------------------------------------------ */}
-              {activeTab === 'insurance' && (
-                <div className="space-y-6 animate-in fade-in duration-200">
-                  <div className="flex items-center gap-4 w-full">
-                    <h3 className="text-xs font-extrabold text-slate-400 uppercase tracking-wider whitespace-nowrap">Health Coverage & Gov IDs</h3>
-                    <div className="h-px flex-grow bg-slate-200" />
-                  </div>
+              <div className={`space-y-6 animate-in fade-in duration-200 ${activeTab === 'insurance' ? 'block' : 'hidden'}`}>
+                <div className="flex items-center gap-4 w-full">
+                  <h3 className="text-xs font-extrabold text-slate-400 uppercase tracking-wider whitespace-nowrap">Health Coverage & Gov IDs</h3>
+                  <div className="h-px flex-grow bg-slate-200" />
+                </div>
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                  <InputField 
+                    label="PhilHealth Number" name="phil_health" error={errors.phil_health} 
+                    defaultValue={patient?.phil_health || ''} readOnly={readOnlyCondition}
+                    icon={<FileText size={15}/>} placeholder="XX-XXXXXXXXX-X"
+                  />
+                  <InputField 
+                    label="Senior Citizen / PWD ID" name="senior_id" error={errors.senior_id} 
+                    defaultValue={patient?.senior_id || ''} readOnly={readOnlyCondition}
+                    icon={<Fingerprint size={15}/>} placeholder="ID Number"
+                  />
+                  <InputField 
+                    label="HMO Provider / Carrier" name="hmo_provider" error={errors.hmo_provider} 
+                    defaultValue={patient?.hmo_provider || ''} readOnly={readOnlyCondition}
+                    icon={<Building size={15}/>} placeholder="e.g. Maxicare, Intellicare"
+                  />
+                  <InputField 
+                    label="HMO Account/Policy Number" name="hmo_accnum" error={errors.hmo_accnum} 
+                    defaultValue={patient?.hmo_accnum || ''} readOnly={readOnlyCondition}
+                    icon={<FileText size={15}/>} placeholder="Policy / Reference ID"
+                  />
+                </div>
+
+                <div className="flex items-center gap-4 w-full pt-2">
+                  <h3 className="text-xs font-extrabold text-slate-400 uppercase tracking-wider whitespace-nowrap">Primary Emergency Contact</h3>
+                  <div className="h-px flex-grow bg-slate-200" />
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+                  <div className="md:col-span-1">
                     <InputField 
-                      label="PhilHealth Number" name="phil_health" error={errors.phil_health} 
-                      defaultValue={patient?.phil_health || ''} readOnly={readOnlyCondition}
-                      icon={<FileText size={15}/>} placeholder="XX-XXXXXXXXX-X"
-                    />
-                    <InputField 
-                      label="Senior Citizen / PWD ID" name="senior_id" error={errors.senior_id} 
-                      defaultValue={patient?.senior_id || ''} readOnly={readOnlyCondition}
-                      icon={<Fingerprint size={15}/>} placeholder="ID Number"
-                    />
-                    <InputField 
-                      label="HMO Provider / Carrier" name="hmo_provider" error={errors.hmo_provider} 
-                      defaultValue={patient?.hmo_provider || ''} readOnly={readOnlyCondition}
-                      icon={<Building size={15}/>} placeholder="e.g. Maxicare, Intellicare"
-                    />
-                    <InputField 
-                      label="HMO Account/Policy Number" name="hmo_accnum" error={errors.hmo_accnum} 
-                      defaultValue={patient?.hmo_accnum || ''} readOnly={readOnlyCondition}
-                      icon={<FileText size={15}/>} placeholder="Policy / Reference ID"
+                      label="Contact Name" name="emergency_contact_name" error={errors.emergency_contact_name} 
+                      defaultValue={patient?.emergency_contact_name || ''} readOnly={readOnlyCondition}
+                      icon={<User size={15}/>} placeholder="Full Name"
                     />
                   </div>
-
-                  <div className="flex items-center gap-4 w-full pt-2">
-                    <h3 className="text-xs font-extrabold text-slate-400 uppercase tracking-wider whitespace-nowrap">Primary Emergency Contact</h3>
-                    <div className="h-px flex-grow bg-slate-200" />
-                  </div>
-
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-                    <div className="md:col-span-1">
-                      <InputField 
-                        label="Contact Name" name="emergency_contact_name" error={errors.emergency_contact_name} 
-                        defaultValue={patient?.emergency_contact_name || ''} readOnly={readOnlyCondition}
-                        icon={<User size={15}/>} placeholder="Full Name"
-                      />
-                    </div>
-                    <div className="md:col-span-1">
-                      <InputField 
-                        label="Contact Mobile" name="emergency_contact_phone" error={errors.emergency_contact_phone} 
-                        defaultValue={patient?.emergency_contact_phone || ''} readOnly={readOnlyCondition}
-                        icon={<Phone size={15}/>} placeholder="0917XXXXXXX"
+                  <div className="md:col-span-1">
+                    <InputField 
+                      label="Contact Mobile" name="emergency_contact_phone" error={errors.emergency_contact_phone} 
+                      defaultValue={patient?.emergency_contact_phone || ''} readOnly={readOnlyCondition}
+                      icon={<Phone size={15}/>} placeholder="0917XXXXXXX"
                     />
-                    </div>
-                    <div className="md:col-span-1">
-                      <InputField 
-                        label="Relationship" name="emergency_relationship" error={errors.emergency_relationship} 
-                        defaultValue={patient?.emergency_relationship || ''} readOnly={readOnlyCondition}
-                        icon={<HeartHandshake size={15}/>} placeholder="e.g. Spouse, Mother"
-                      />
-                    </div>
+                  </div>
+                  <div className="md:col-span-1">
+                    <InputField 
+                      label="Relationship" name="emergency_relationship" error={errors.emergency_relationship} 
+                      defaultValue={patient?.emergency_relationship || ''} readOnly={readOnlyCondition}
+                      icon={<HeartHandshake size={15}/>} placeholder="e.g. Spouse, Mother"
+                    />
                   </div>
                 </div>
-              )}
+              </div>
 
             </form>
           </div>
