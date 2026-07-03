@@ -42,7 +42,7 @@ export default function Patients() {
         actions={
           <button 
             className="group flex items-center gap-2 px-5 py-2.5 bg-[#0284c7] hover:bg-[#026ca1] active:scale-95 text-white rounded-xl text-sm font-semibold transition-all shadow-md shadow-rose-500/10"
-            onClick={() => handleViewProfile(null)}
+            onClick={() => handleViewProfile('')}
           >
             <Plus size={16} className="transition-transform group-hover:rotate-90" />
             Register New Patient
@@ -93,7 +93,6 @@ export default function Patients() {
                     <TableLoading rows={5} columns={6} />
                 ) : isError ? (
                     <TableError colSpan={6} onRetry={() => refetch()} />
-                    
                 ) : currentPatients.length > 0 ? (
                     currentPatients.map((patient) => (
                     <tr key={patient.id} className="group hover:bg-[var(--active-parent,rgb(99,102,241))]/5 transition-all duration-200">
