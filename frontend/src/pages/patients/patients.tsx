@@ -1,12 +1,13 @@
 import { useState } from 'react';
 import { Plus, Search, Filter, ArrowUpDown, Users, Mail, Phone, Eye, Droplet } from 'lucide-react';
 import ModuleHeader from '../../components/ui/ModuleHeader';
+import { TableLoading, TableError, TableEmpty } from '../../components/ui/TableStates';
 import { usePatients } from '../../hooks/usePatients';
 import { calculateAge } from '../../utils/formatters';
 import RegisterPatientModal from '../../components/modals/patientModals/RegisterPatientModal';
 
 export default function Patients() {
-  const { data: patients = [], isLoading, isError } = usePatients();
+  const { data: patients = [], isLoading, isError, refetch } = usePatients();
   const [selectedPatientId, setSelectedPatientId] = useState<string | null>(null);
   const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
   
@@ -89,13 +90,10 @@ export default function Patients() {
                 </thead>
                 <tbody className="divide-y divide-slate-100">
                 {isLoading ? (
-                    <tr>
-                      <td colSpan={6} className="p-8 text-center text-slate-400">Loading records...</td>
-                    </tr>
+                    <TableLoading rows={5} columns={6} />
                 ) : isError ? (
-                    <tr>
-                      <td colSpan={6} className="p-8 text-center text-red-500">Error loading data</td>
-                    </tr>
+                    <TableError colSpan={6} onRetry={() => refetch()} />
+                    
                 ) : currentPatients.length > 0 ? (
                     currentPatients.map((patient) => (
                     <tr key={patient.id} className="group hover:bg-[var(--active-parent,rgb(99,102,241))]/5 transition-all duration-200">
@@ -180,9 +178,7 @@ export default function Patients() {
                     </tr>
                     ))
                 ) : (
-                    <tr>
-                    <td colSpan={6} className="p-8 text-center text-slate-400">No patients found.</td>
-                    </tr>
+                    <TableEmpty colSpan={6} />
                 )}
                 </tbody>
             </table>
