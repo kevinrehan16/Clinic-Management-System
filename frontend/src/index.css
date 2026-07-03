@@ -10,11 +10,13 @@
     margin: 0;
     padding: 0;
     font-family: 'Inter', sans-serif !important;
+    @apply antialiased;
   }
   
   /* Para masiguro na gagana ang font-heading na class natin */
   .font-heading {
     font-family: 'Plus Jakarta Sans', sans-serif !important;
+    @apply antialiased;
   }
 
   button {

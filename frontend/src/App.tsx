@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ThemeProvider } from './contexts/ThemeContext'; 
 import LoginPage from './pages/LoginPage';
 import MainLayout from './components/layout/MainLayout';
+import LoadingScreen from './components/ui/LoadingScreen';
 
 // PAGES
 import AdminDashboard from './pages/dashboards/AdminDashboard';
@@ -15,7 +16,7 @@ const ProtectedRoute = () => {
   const { isAuthenticated, isLoading } = useAuth();
 
   if (isLoading) {
-    return <div>Loading...</div>; // O kaya loading spinner/skeleton
+    return <LoadingScreen />;
   }
 
   return isAuthenticated ? <Outlet /> : <Navigate to="/login" replace />;

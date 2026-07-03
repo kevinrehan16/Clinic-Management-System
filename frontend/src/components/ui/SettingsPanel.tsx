@@ -1,5 +1,5 @@
 import { X, Check } from 'lucide-react';
-import { useTheme } from '../contexts/ThemeContext';
+import { useTheme } from '../../contexts/ThemeContext';
 
 export const SettingsPanel = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) => {
   const { theme, setTheme } = useTheme();

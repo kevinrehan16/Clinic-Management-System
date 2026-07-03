@@ -4,7 +4,7 @@ import {
   AlertCircle, Clock, CheckCircle2, Hospital, Stethoscope, Syringe,
   FileText, Droplet, Truck, ShieldCheck, Wallet, UserCheck, Pill, MoreVertical, LayoutDashboard 
 } from 'lucide-react';
-import ModuleHeader from '../../components/ModuleHeader';
+import ModuleHeader from '../../components/ui/ModuleHeader';
 
 export default function AdminDashboard() {
   // =========================================================================

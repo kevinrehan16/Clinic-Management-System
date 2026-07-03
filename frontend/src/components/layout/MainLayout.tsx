@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Outlet } from 'react-router-dom';
 import Sidebar from './Sidebar';
 import Topbar from './Topbar';
-import { SettingsPanel } from '../SettingsPanel';
+import { SettingsPanel } from '../ui/SettingsPanel';
 import { useTheme } from '../../contexts/ThemeContext';
 
 export default function MainLayout() {

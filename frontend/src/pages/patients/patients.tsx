@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Plus, Search, Filter, ArrowUpDown, Users, Mail, Phone, Eye, Droplet } from 'lucide-react';
-import ModuleHeader from '../../components/ModuleHeader';
+import ModuleHeader from '../../components/ui/ModuleHeader';
 import { usePatients } from '../../hooks/usePatients';
 import { calculateAge } from '../../utils/formatters';
 import RegisterPatientModal from '../../components/modals/patientModals/RegisterPatientModal';
