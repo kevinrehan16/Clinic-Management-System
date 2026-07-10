@@ -3,7 +3,7 @@ import {
   X, User, Mail, Calendar, Phone, MapPin, Lock, Pencil, Ban, Loader2, Save, PencilOff,
   Shield, ShieldAlert, ClipboardList, HeartHandshake, Briefcase, Globe, Fingerprint, FileText, Building, LockKeyhole, Edit2, Trash2, Plus, Search
 } from 'lucide-react';
-import { usePatientDetails, useRegisterPatient, useUpdatePatient } from '../../../hooks/usePatients';
+import { usePatientDetails, useRegisterPatient, useUpdatePatient, usePatientAllergies } from '../../../hooks/usePatients';
 import { InputField } from '../../inputs/InputField';
 import { SelectField } from '../../inputs/SelectField';
 
@@ -17,6 +17,7 @@ type TabType = 'personal' | 'contact' | 'insurance' | 'medhistory' | 'allergies'
 
 export default function RegisterPatientModal({ isOpen, onClose, patientId }: ModalProps) {
   const { data: patient, isLoading } = usePatientDetails(patientId);
+  const { data: allergies, isLoading: loadingAllergies } = usePatientAllergies('69595991-438c-410d-98be-5f236efe2ae6');
   const [errors, setErrors] = useState<Record<string, string[]>>({});
   const [activeTab, setActiveTab] = useState<TabType>('personal');
   const { mutate: register, isPending: isRegistering } = useRegisterPatient();
@@ -24,6 +25,8 @@ export default function RegisterPatientModal({ isOpen, onClose, patientId }: Mod
   
   const isEditMode = !!patientId;
   const [isEditing, setIsEditing] = useState(false);
+
+  console.log(allergies);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();

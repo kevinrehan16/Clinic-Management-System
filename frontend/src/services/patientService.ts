@@ -16,6 +16,14 @@ export interface Patient {
   land_line: string | null;
 }
 
+export interface Allergy {
+  id: string;
+  allergen: string;
+  reaction: string;
+  severity: 'LOW' | 'MEDIUM' | 'HIGH'; // Base sa backend model mo
+  created_at: string;
+}
+
 // Service Methods
 export const patientService = {
   getPatients: async (): Promise<Patient[]> => {
@@ -36,5 +44,12 @@ export const patientService = {
   updatePatient: async (id: string, data: any): Promise<Patient> => {
     const res = await apiClient.patch(`/patients/${id}/`, data);
     return res.data;
+  },
+
+  getPatientAllergies: async (patientId: string): Promise<Allergy[]> => {
+    const { data } = await apiClient.get('patients/allergies/',{
+      params: { patient_id: patientId }
+    });
+    return data;
   },
 };

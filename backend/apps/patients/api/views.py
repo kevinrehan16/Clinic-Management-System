@@ -4,9 +4,22 @@ from ..models import PatientAllergy, PatientMedicalHistory, PatientProfile
 from ..serializers.patient_serializer import PatientAllergySerializer, PatientMedicalHistorySerializer, PatientSerializer
 
 class PatientAllergyListCreateView(generics.ListCreateAPIView):
-    queryset = PatientAllergy.objects.all()
+    # queryset = PatientAllergy.objects.all()
     serializer_class = PatientAllergySerializer
     permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        # 1. Kunin muna lahat
+        queryset = PatientAllergy.objects.all()
+        
+        # 2. Kunin ang 'patient_id' mula sa request URL (e.g., ?patient_id=uuid)
+        patient_id = self.request.query_params.get('patient_id', None)
+        
+        # 3. Kung may ipinasang patient_id, i-filter ang listahan
+        if patient_id is not None:
+            queryset = queryset.filter(patient_id=patient_id)
+            
+        return queryset.order_by('-created_at')
 
 class PatientMedicalHistoryListCreateView(generics.ListCreateAPIView):
     queryset = PatientMedicalHistory.objects.all()

@@ -1,6 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 // I-import natin ang 'patientService' imbes na yung individual functions
-import { patientService, type Patient } from '../services/patientService';
+import { patientService, type Patient, type Allergy } from '../services/patientService';
 
 export const usePatients = () => {
   return useQuery<Patient[], Error>({
@@ -46,5 +46,13 @@ export const useUpdatePatient = () => {
     onError: (error: any) => {
       console.error("Updating failed:", error.response?.data || error.message);
     }
+  });
+};
+
+export const usePatientAllergies = (patientId: string | undefined) => {
+  return useQuery<Allergy[], Error>({
+    queryKey: ['patient-allergies', patientId],
+    queryFn: patientService.getPatientAllergies(patientId), // Gagamitin na natin ang method mula sa object
+    staleTime: 1000 * 60 * 5,
   });
 };
