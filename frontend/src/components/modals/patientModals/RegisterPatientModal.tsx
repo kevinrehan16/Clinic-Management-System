@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { 
   X, User, Mail, Calendar, Phone, MapPin, Lock, Pencil, Ban, Loader2, Save, PencilOff,
-  Shield, HeartHandshake, Briefcase, Globe, Fingerprint, FileText, Building, LockKeyhole  
+  Shield, ShieldAlert, ClipboardList, HeartHandshake, Briefcase, Globe, Fingerprint, FileText, Building, LockKeyhole, Edit2, Trash2, Plus, Search
 } from 'lucide-react';
 import { usePatientDetails, useRegisterPatient, useUpdatePatient } from '../../../hooks/usePatients';
 import { InputField } from '../../inputs/InputField';
@@ -13,7 +13,7 @@ interface ModalProps {
   patientId?: string | null;
 }
 
-type TabType = 'personal' | 'contact' | 'insurance';
+type TabType = 'personal' | 'contact' | 'insurance' | 'medhistory' | 'allergies';
 
 export default function RegisterPatientModal({ isOpen, onClose, patientId }: ModalProps) {
   const { data: patient, isLoading } = usePatientDetails(patientId);
@@ -140,6 +140,28 @@ export default function RegisterPatientModal({ isOpen, onClose, patientId }: Mod
               }`}
             >
               <Shield size={14} /> Insurance & Emergency
+            </button>
+            <button
+              type="button"
+              onClick={() => setActiveTab('medhistory')}
+              className={`px-4 py-3.5 text-xs font-bold tracking-wider uppercase border-b-2 transition-all flex items-center gap-2 ${
+                activeTab === 'medhistory'
+                  ? 'border-[var(--active-parent)] text-[var(--active-parent)] bg-white font-black'
+                  : 'border-transparent text-slate-400 hover:text-slate-600'
+              }`}
+            >
+              <ClipboardList size={14} /> MEDICAL HISTORY
+            </button>
+            <button
+              type="button"
+              onClick={() => setActiveTab('allergies')}
+              className={`px-4 py-3.5 text-xs font-bold tracking-wider uppercase border-b-2 transition-all flex items-center gap-2 ${
+                activeTab === 'allergies'
+                  ? 'border-[var(--active-parent)] text-[var(--active-parent)] bg-white font-black'
+                  : 'border-transparent text-slate-400 hover:text-slate-600'
+              }`}
+            >
+              <ShieldAlert size={14} /> ALLERGIES
             </button>
           </div>
 
@@ -362,6 +384,124 @@ export default function RegisterPatientModal({ isOpen, onClose, patientId }: Mod
                       defaultValue={patient?.emergency_relationship || ''} readOnly={readOnlyCondition}
                       icon={<HeartHandshake size={15}/>} placeholder="e.g. Spouse, Mother"
                     />
+                  </div>
+                </div>
+              </div>
+
+              {/* ------------------------------------------
+                  TAB 3: MEDICAL HISTORY
+                 ------------------------------------------ */}
+              <div className={`space-y-6 animate-in fade-in duration-200 ${activeTab === 'medhistory' ? 'block' : 'hidden'}`}>
+                <div className="flex items-center gap-4 w-full">
+                  <h3 className="text-xs font-extrabold text-slate-400 uppercase tracking-wider whitespace-nowrap">Patient Medical Records</h3>
+                  <div className="h-px flex-grow bg-slate-200" />
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                  <InputField 
+                    label="PhilHealth Number" name="phil_health" error={errors.phil_health} 
+                    defaultValue={patient?.phil_health || ''} readOnly={readOnlyCondition}
+                    icon={<FileText size={15}/>} placeholder="XX-XXXXXXXXX-X"
+                  />
+                  
+                </div>
+
+                <div className="flex items-center gap-4 w-full pt-2">
+                  <h3 className="text-xs font-extrabold text-slate-400 uppercase tracking-wider whitespace-nowrap">Primary Emergency Contact</h3>
+                  <div className="h-px flex-grow bg-slate-200" />
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+                  <div className="md:col-span-1">
+                    <InputField 
+                      label="Contact Name" name="emergency_contact_name" error={errors.emergency_contact_name} 
+                      defaultValue={patient?.emergency_contact_name || ''} readOnly={readOnlyCondition}
+                      icon={<User size={15}/>} placeholder="Full Name"
+                    />
+                  </div>
+                  
+                </div>
+              </div>
+
+              {/* ------------------------------------------
+                  TAB 3: ALLERGIES
+                 ------------------------------------------ */}
+              <div className={`space-y-6 animate-in fade-in duration-200 ${activeTab === 'allergies' ? 'block' : 'hidden'}`}>
+                <div className="flex items-center gap-4 w-full">
+                  <h3 className="text-xs font-extrabold text-slate-400 uppercase tracking-wider whitespace-nowrap">Allergen Registry</h3>
+                  <div className="h-px flex-grow bg-slate-200" />
+                </div>
+                <div className="grid grid-cols-12 md:grid-cols-12 gap-5">
+                  <div className="flex col-span-12 flex-col gap-4">
+                    {/* Header Section */}
+                    <div className="flex items-center justify-between pb-2">
+                      <div className="group/search flex items-center bg-white border border-slate-200/80 focus-within:border-[var(--active-parent,rgb(99,102,241))] focus-within:ring-4 focus-within:ring-[var(--active-parent,rgb(99,102,241))]/5 rounded-xl px-4 py-2.5 w-full md:max-w-md transition-all shadow-sm">
+                        <Search size={18} className="text-slate-400 group-focus-within/search:text-[var(--active-parent,rgb(99,102,241))] mr-3 transition-colors" />
+                        <input 
+                          type="text" 
+                          placeholder="Search patients by name..."
+                          // value={searchTerm}
+                          onChange={(e) => { 
+                            // setSearchTerm(e.target.value); 
+                            // setCurrentPage(1); 
+                          }}
+                          className="bg-transparent w-full border-none outline-none text-sm placeholder-slate-400 text-slate-700"
+                        />
+                      </div>
+                      <button 
+                        className="flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 transition-all text-white text-xs font-bold px-6 py-2.5 rounded-xl shadow-sm"
+                      >
+                        <Plus size={14} /> ALLERGY
+                      </button>
+                    </div>
+                    {/* Table Area */}
+                    <div className="overflow-hidden border border-slate-200 rounded-xl shadow-sm">
+                      <table className="w-full text-left border-collapse">
+                        <thead className="bg-slate-50 border-b border-slate-200">
+                          <tr>
+                            <th className="p-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest">Allergen</th>
+                            <th className="p-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest">Severity</th>
+                            <th className="p-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest">Reaction Details</th>
+                            <th className="p-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest">Added Date</th>
+                            <th className="p-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest text-right">Actions</th>
+                          </tr>
+                        </thead>
+                        <tbody className="divide-y divide-slate-100">
+                          
+                          {/* ROW 1: SEVERE */}
+                          <tr className="group hover:bg-slate-50/50 transition-all">
+                            <td className="p-4 text-sm font-semibold text-slate-900">Penicillin</td>
+                            <td className="p-4">
+                              <span className="inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wide border bg-red-50 text-red-600 border-red-100">
+                                SEVERE
+                              </span>
+                            </td>
+                            <td className="p-4 text-sm text-slate-600">Anaphylactic shock (throat swelling)</td>
+                            <td className="p-4 text-sm text-slate-400 font-mono">2026-06-15</td>
+                            <td className="p-4 text-right">
+                              <button className="text-slate-300 hover:text-indigo-600 p-1"><Edit2 size={14} /></button>
+                              <button className="text-slate-300 hover:text-red-500 p-1 ml-2"><Trash2 size={14} /></button>
+                            </td>
+                          </tr>
+
+                          {/* ROW 2: MODERATE */}
+                          <tr className="group hover:bg-slate-50/50 transition-all">
+                            <td className="p-4 text-sm font-semibold text-slate-900">Peanuts</td>
+                            <td className="p-4">
+                              <span className="inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wide border bg-amber-50 text-amber-600 border-amber-100">
+                                MODERATE
+                              </span>
+                            </td>
+                            <td className="p-4 text-sm text-slate-600">Hives, skin rashes in body</td>
+                            <td className="p-4 text-sm text-slate-400 font-mono">2026-07-10</td>
+                            <td className="p-4 text-right">
+                              <button className="text-slate-300 hover:text-indigo-600 p-1"><Edit2 size={14} /></button>
+                              <button className="text-slate-300 hover:text-red-500 p-1 ml-1"><Trash2 size={14} /></button>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
                   </div>
                 </div>
               </div>
