@@ -18,6 +18,7 @@ export interface Patient {
 
 export interface Allergy {
   id: string;
+  patient: string;
   allergen: string;
   reaction: string;
   severity: 'LOW' | 'MEDIUM' | 'HIGH'; // Base sa backend model mo
@@ -52,4 +53,10 @@ export const patientService = {
     });
     return data;
   },
+
+  // OMIT = MEANS gamitin mo yung ALLERGY INTERFACE, pero wag mo isama yung id and created_at
+  insertAllergy: async (data: Omit<Allergy, 'id' | 'created_at'>): Promise<Allergy> => {
+    const { data: response } = await apiClient.post<Allergy>('patients/allergies/', data);
+    return response;
+  }
 };

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Plus, Search, Filter, ArrowUpDown, Users, Mail, Phone, Eye, Droplet } from 'lucide-react';
+import { Plus, Search, Filter, ArrowUpDown, Users, Mail, Smartphone, Eye, Droplet } from 'lucide-react';
 import ModuleHeader from '../../components/ui/ModuleHeader';
 import { TableLoading, TableError, TableEmpty } from '../../components/ui/TableStates';
 import { usePatients } from '../../hooks/usePatients';
@@ -128,7 +128,7 @@ export default function Patients() {
                             
                             {/* Phone Number */}
                             <div className="flex items-center gap-2 text-slate-600">
-                              <Phone size={12} className="text-slate-400 shrink-0" />
+                              <Smartphone size={12} className="text-slate-400 shrink-0" />
                               <span className="text-xs font-mono">
                                 {patient.phone_number || <span className="text-slate-300 italic">No number</span>}
                               </span>

@@ -4,6 +4,8 @@ import {
   Shield, ShieldAlert, ClipboardList, HeartHandshake, Briefcase, Globe, Fingerprint, FileText, Building, LockKeyhole, Edit2, Trash2, Plus, Search
 } from 'lucide-react';
 import { usePatientDetails, useRegisterPatient, useUpdatePatient, usePatientAllergies } from '../../../hooks/usePatients';
+import { modalAnimation } from '../../../utils/ModalAnimation';
+import { AllergyModal } from './AllergyModal';
 import { InputField } from '../../inputs/InputField';
 import { SelectField } from '../../inputs/SelectField';
 
@@ -15,7 +17,22 @@ interface ModalProps {
 
 type TabType = 'personal' | 'contact' | 'insurance' | 'medhistory' | 'allergies';
 
+const getSeverityBadge = (severity: string) => {
+  switch (severity?.toUpperCase()) {
+    case 'HIGH':
+    case 'SEVERE':
+      return 'bg-red-50 text-red-600 border-red-100';
+    case 'MEDIUM':
+    case 'MODERATE':
+      return 'bg-amber-50 text-amber-600 border-amber-100';
+    case 'LOW':
+    default:
+      return 'bg-blue-50 text-blue-600 border-blue-100';
+  }
+};
+
 export default function RegisterPatientModal({ isOpen, onClose, patientId }: ModalProps) {
+  const { isClosing, startClose, handleAnimationEnd } = modalAnimation(onClose);
   const { data: patient, isLoading } = usePatientDetails(patientId);
   const { data: allergies, isLoading: loadingAllergies } = usePatientAllergies(patientId);
   const [errors, setErrors] = useState<Record<string, string[]>>({});
@@ -26,7 +43,7 @@ export default function RegisterPatientModal({ isOpen, onClose, patientId }: Mod
   const isEditMode = !!patientId;
   const [isEditing, setIsEditing] = useState(false);
 
-  console.log(allergies);
+  const [isModalAllergyOpen, setIsModalAllergyOpen] = useState(false);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -66,29 +83,12 @@ export default function RegisterPatientModal({ isOpen, onClose, patientId }: Mod
 
   return (
     <>
-      {/* 🌟 PREMIUM EMBEDDED KEYFRAMES (Para sa swábeng transition effects) */}
-      <style>{`
-        @keyframes customBackdropFade {
-          from { opacity: 0; backdrop-filter: blur(0px); }
-          to { opacity: 1; backdrop-filter: blur(4px); }
-        }
-        @keyframes customModalIn {
-          from { transform: scale(0.96) translateY(12px); opacity: 0; }
-          to { transform: scale(1) translateY(0); opacity: 1; }
-        }
-        .animate-premium-backdrop {
-          animation: customBackdropFade 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
-        }
-        .animate-premium-modal {
-          animation: customModalIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
-        }
-      `}</style>
-
       {/* BACKDROP CONTAINER */}
-      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 animate-premium-backdrop">
+      <div className={`fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 ${isClosing ? 'modal-overlay closing' : 'modal-overlay'}`}
+      onAnimationEnd={handleAnimationEnd}>
         
         {/* MODAL WRAPPER BODY */}
-        <div className="bg-white rounded-3xl shadow-2xl w-full max-w-4xl overflow-hidden border border-slate-200/80 flex flex-col max-h-[92vh] animate-premium-modal">
+        <div className={`bg-white rounded-3xl shadow-2xl w-full max-w-4xl overflow-hidden border border-slate-200/80 flex flex-col max-h-[92vh] ${isClosing ? 'modal-content closing' : 'modal-content'}`}>
           
           {/* ==========================================
               HEADER - STICKY
@@ -102,7 +102,7 @@ export default function RegisterPatientModal({ isOpen, onClose, patientId }: Mod
                   {patientId ? 'Comprehensive view and record governance' : 'Create standardized clinical record for health tracking'}
               </p>
             </div>
-            <button onClick={onClose} className="p-2 hover:bg-white/10 active:scale-95 rounded-full transition-all">
+            <button onClick={startClose} className="p-2 hover:bg-white/10 active:scale-95 rounded-full transition-all">
               <X size={20} />
             </button>
           </div>
@@ -452,7 +452,9 @@ export default function RegisterPatientModal({ isOpen, onClose, patientId }: Mod
                         />
                       </div>
                       <button 
+                        type="button"
                         className="flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 transition-all text-white text-xs font-bold px-6 py-2.5 rounded-xl shadow-sm"
+                        onClick={() => setIsModalAllergyOpen(true)}
                       >
                         <Plus size={14} /> ALLERGY
                       </button>
@@ -469,39 +471,56 @@ export default function RegisterPatientModal({ isOpen, onClose, patientId }: Mod
                             <th className="p-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest text-right">Actions</th>
                           </tr>
                         </thead>
-                        <tbody className="divide-y divide-slate-100">
-                          
-                          {/* ROW 1: SEVERE */}
-                          <tr className="group hover:bg-slate-50/50 transition-all">
-                            <td className="p-4 text-sm font-semibold text-slate-900">Penicillin</td>
-                            <td className="p-4">
-                              <span className="inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wide border bg-red-50 text-red-600 border-red-100">
-                                SEVERE
-                              </span>
-                            </td>
-                            <td className="p-4 text-sm text-slate-600">Anaphylactic shock (throat swelling)</td>
-                            <td className="p-4 text-sm text-slate-400 font-mono">2026-06-15</td>
-                            <td className="p-4 text-right">
-                              <button className="text-slate-300 hover:text-indigo-600 p-1"><Edit2 size={14} /></button>
-                              <button className="text-slate-300 hover:text-red-500 p-1 ml-2"><Trash2 size={14} /></button>
-                            </td>
-                          </tr>
+                        <tbody>
+                          {allergies && allergies.length > 0 ? (
+                            allergies.map((allergy) => (
+                              <tr key={allergy.id} className="group hover:bg-slate-50/50 transition-all">
+                                {/* ALLERGEN */}
+                                <td className="p-4 text-sm font-semibold text-slate-900">
+                                  {allergy.allergen}
+                                </td>
 
-                          {/* ROW 2: MODERATE */}
-                          <tr className="group hover:bg-slate-50/50 transition-all">
-                            <td className="p-4 text-sm font-semibold text-slate-900">Peanuts</td>
-                            <td className="p-4">
-                              <span className="inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wide border bg-amber-50 text-amber-600 border-amber-100">
-                                MODERATE
-                              </span>
-                            </td>
-                            <td className="p-4 text-sm text-slate-600">Hives, skin rashes in body</td>
-                            <td className="p-4 text-sm text-slate-400 font-mono">2026-07-10</td>
-                            <td className="p-4 text-right">
-                              <button className="text-slate-300 hover:text-indigo-600 p-1"><Edit2 size={14} /></button>
-                              <button className="text-slate-300 hover:text-red-500 p-1 ml-1"><Trash2 size={14} /></button>
-                            </td>
-                          </tr>
+                                {/* SEVERITY BADGE */}
+                                <td className="p-4">
+                                  <span className={`inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wide border ${getSeverityBadge(allergy.severity)}`}>
+                                    {allergy.severity}
+                                  </span>
+                                </td>
+
+                                {/* REACTION */}
+                                <td className="p-4 text-sm text-slate-600">
+                                  {allergy.reaction}
+                                </td>
+
+                                {/* DATE CREATED */}
+                                <td className="p-4 text-sm text-slate-400 font-mono">
+                                  {allergy.created_at ? new Date(allergy.created_at).toLocaleDateString('en-CA') : 'N/A'}
+                                </td>
+
+                                {/* ACTIONS */}
+                                <td className="p-4 text-right">
+                                  <button 
+                                    className="text-slate-300 hover:text-indigo-600 p-1"
+                                    // onClick={() => handleEditAllergy(allergy)} // Kung may edit handler ka
+                                  >
+                                    <Edit2 size={14} />
+                                  </button>
+                                  <button 
+                                    className="text-slate-300 hover:text-red-500 p-1 ml-2"
+                                    // onClick={() => handleDeleteAllergy(allergy.id)} // Kung may delete handler ka
+                                  >
+                                    <Trash2 size={14} />
+                                  </button>
+                                </td>
+                              </tr>
+                            ))
+                          ) : (
+                            <tr>
+                              <td colSpan={5} className="p-8 text-center text-sm text-slate-400">
+                                No reported allergies for this patient.
+                              </td>
+                            </tr>
+                          )}
                         </tbody>
                       </table>
                     </div>
@@ -518,7 +537,7 @@ export default function RegisterPatientModal({ isOpen, onClose, patientId }: Mod
           <div className="px-8 py-4 bg-slate-50 border-t border-slate-200/60 flex gap-3 justify-end flex-shrink-0">
               <button 
                   type="button" 
-                  onClick={onClose} 
+                  onClick={startClose} 
                   className="px-5 py-2.5 text-xs font-bold uppercase tracking-wider text-slate-500 hover:text-rose-700 hover:bg-rose-50 rounded-xl transition-all flex items-center gap-2"
               >
                   <Ban size={15} /> Close Gateway
@@ -562,6 +581,16 @@ export default function RegisterPatientModal({ isOpen, onClose, patientId }: Mod
 
         </div>
       </div>
+      
+      <AllergyModal 
+        isOpen={isModalAllergyOpen}
+        onClose={() => setIsModalAllergyOpen(false)}
+        patientId={patientId || ""} // Yung galing sa props o URL
+        onSubmit={(data) => {
+          console.log("Data to send to backend:", data);
+        }}
+      />
+
     </>
   );
 }

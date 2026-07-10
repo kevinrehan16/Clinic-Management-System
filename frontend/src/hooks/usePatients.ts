@@ -53,11 +53,24 @@ export const usePatientAllergies = (patientId: string | undefined) => {
   return useQuery<Allergy[], Error>({
     queryKey: ['patient-allergies', patientId],
     
-    // 💡 TAMA: Ginawa nating arrow function para si React Query ang mag-execute nito sa tamang oras
     queryFn: () => patientService.getPatientAllergies(patientId!), 
     
     enabled: !!patientId && patientId !== 'undefined',
     staleTime: 1000 * 60 * 5,
     refetchOnWindowFocus: false, // Magandang idagdag din ito para iwas rate-limit sa dev mode
+  });
+};
+
+export const useAddAllergy = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: patientService.insertAllergy,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['patient-allergies'] });
+    },
+    onError: (error) => {
+      console.error("Failed to add allergy:", error);
+    }
   });
 };
