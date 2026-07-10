@@ -52,7 +52,12 @@ export const useUpdatePatient = () => {
 export const usePatientAllergies = (patientId: string | undefined) => {
   return useQuery<Allergy[], Error>({
     queryKey: ['patient-allergies', patientId],
-    queryFn: patientService.getPatientAllergies(patientId), // Gagamitin na natin ang method mula sa object
+    
+    // 💡 TAMA: Ginawa nating arrow function para si React Query ang mag-execute nito sa tamang oras
+    queryFn: () => patientService.getPatientAllergies(patientId!), 
+    
+    enabled: !!patientId && patientId !== 'undefined',
     staleTime: 1000 * 60 * 5,
+    refetchOnWindowFocus: false, // Magandang idagdag din ito para iwas rate-limit sa dev mode
   });
 };

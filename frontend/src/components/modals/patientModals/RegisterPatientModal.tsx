@@ -17,7 +17,7 @@ type TabType = 'personal' | 'contact' | 'insurance' | 'medhistory' | 'allergies'
 
 export default function RegisterPatientModal({ isOpen, onClose, patientId }: ModalProps) {
   const { data: patient, isLoading } = usePatientDetails(patientId);
-  const { data: allergies, isLoading: loadingAllergies } = usePatientAllergies('69595991-438c-410d-98be-5f236efe2ae6');
+  const { data: allergies, isLoading: loadingAllergies } = usePatientAllergies(patientId);
   const [errors, setErrors] = useState<Record<string, string[]>>({});
   const [activeTab, setActiveTab] = useState<TabType>('personal');
   const { mutate: register, isPending: isRegistering } = useRegisterPatient();
