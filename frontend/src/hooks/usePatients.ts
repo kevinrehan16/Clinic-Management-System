@@ -74,3 +74,11 @@ export const useAddAllergy = () => {
     }
   });
 };
+
+export const useAllergyQuery = (patientId: string, allergyId: string) => {
+  return useQuery({
+    queryKey: ['allergy', patientId, allergyId],
+    queryFn: () => patientService.getPatientAllergy(patientId, allergyId),
+    enabled: !!patientId && !!allergyId, // Tumatakbo lang kung may ID
+  });
+};

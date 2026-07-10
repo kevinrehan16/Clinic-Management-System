@@ -21,6 +21,15 @@ class PatientAllergyListCreateView(generics.ListCreateAPIView):
             
         return queryset.order_by('-created_at')
 
+class PatientAllergyDetailView(generics.RetrieveUpdateDestroyAPIView):
+    serializer_class = PatientAllergySerializer
+    lookup_url_kwarg = 'allergy_id' # Ito yung magiging 'pk' sa loob ng view
+
+    def get_queryset(self):
+        # I-filter ang allergy base sa patient_id na galing sa URL
+        patient_id = self.kwargs.get('patient_id')
+        return PatientAllergy.objects.filter(patient__id=patient_id)
+    
 class PatientMedicalHistoryListCreateView(generics.ListCreateAPIView):
     queryset = PatientMedicalHistory.objects.all()
     serializer_class = PatientMedicalHistorySerializer

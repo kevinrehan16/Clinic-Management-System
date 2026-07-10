@@ -4,16 +4,21 @@ import { useAddAllergy } from '../../../hooks/usePatients';
 import { modalAnimation } from '../../../utils/ModalAnimation';
 import { InputField } from '../../inputs/InputField';
 import { SelectField } from '../../inputs/SelectField';
+import { useAllergyQuery } from '../../../hooks/usePatients';
 
 interface AllergyModalProps {
   isOpen: boolean;
   onClose: () => void;
   patientId: string;
+  allergyId: string;
 }
 
-export const AllergyModal = ({ isOpen, onClose, patientId }: AllergyModalProps) => {
+export const AllergyModal = ({ isOpen, onClose, patientId ,allergyId }: AllergyModalProps) => {
+  const { data: allergy, isLoading, isError } = useAllergyQuery(patientId, allergyId);
   const { isClosing, startClose, handleAnimationEnd } = modalAnimation(onClose);
   const { mutate: addAllergy, isPending } = useAddAllergy();
+
+  console.log(allergy);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -63,6 +68,7 @@ export const AllergyModal = ({ isOpen, onClose, patientId }: AllergyModalProps) 
             <InputField 
               label="Allergen" 
               name="allergen" 
+              defaultValue={allergy?.allergen}
               required
               icon={<Heart size={15} />} 
               placeholder="e.g. Peanuts, Penicillin" 
@@ -72,6 +78,7 @@ export const AllergyModal = ({ isOpen, onClose, patientId }: AllergyModalProps) 
             <SelectField 
               label="Severity" 
               name="severity"
+              defaultValue={allergy?.severity}
               options={[
                 { label: 'Low Risk', value: 'LOW' },
                 { label: 'Moderate', value: 'MEDIUM' },
@@ -85,6 +92,7 @@ export const AllergyModal = ({ isOpen, onClose, patientId }: AllergyModalProps) 
                <textarea
                  name="reaction"
                  required
+                 defaultValue={allergy?.reaction}
                  rows={3}
                  className="w-full px-3 py-2 rounded-lg border border-slate-200 focus:border-[var(--active-parent,rgb(99,102,241))] focus:ring-4 focus:ring-[var(--active-parent,rgb(99,102,241))]/10 outline-none transition-all text-sm resize-none"
                  placeholder="Describe the reaction..."

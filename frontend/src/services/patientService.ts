@@ -58,5 +58,17 @@ export const patientService = {
   insertAllergy: async (data: Omit<Allergy, 'id' | 'created_at'>): Promise<Allergy> => {
     const { data: response } = await apiClient.post<Allergy>('patients/allergies/', data);
     return response;
-  }
+  },
+
+  // Kunin ang specific allergy details (para sa Edit Form)
+  getPatientAllergy: async (patientId: string, allergyId: string) => {
+    const { data: response } = await apiClient.get<Allergy>(`patients/${patientId}/allergies/${allergyId}/`);
+    return response;
+  },
+
+  // I-update ang allergy (PATCH method)
+  // updateAllergy: async (patientId, allergyId, data) => {
+  //   const response = await axios.patch(`${API_BASE_URL}/patients/${patientId}/allergies/${allergyId}/`, data);
+  //   return response.data;
+  // }
 };

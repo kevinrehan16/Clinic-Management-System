@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { 
   X, User, Mail, Calendar, Phone, MapPin, Lock, Pencil, Ban, Loader2, Save, PencilOff,
-  Shield, ShieldAlert, ClipboardList, HeartHandshake, Briefcase, Globe, Fingerprint, FileText, Building, LockKeyhole, Edit2, Trash2, Plus, Search
+  Shield, ShieldAlert, ClipboardList, HeartHandshake, Briefcase, Globe, Fingerprint, FileText, Building, LockKeyhole, Edit2, Trash2, Plus, Search,
+  Smartphone
 } from 'lucide-react';
 import { usePatientDetails, useRegisterPatient, useUpdatePatient, usePatientAllergies } from '../../../hooks/usePatients';
 import { modalAnimation } from '../../../utils/ModalAnimation';
@@ -44,6 +45,7 @@ export default function RegisterPatientModal({ isOpen, onClose, patientId }: Mod
   const [isEditing, setIsEditing] = useState(false);
 
   const [isModalAllergyOpen, setIsModalAllergyOpen] = useState(false);
+  const [allergyId, setAllergyId] = useState("");
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -76,6 +78,11 @@ export default function RegisterPatientModal({ isOpen, onClose, patientId }: Mod
         });
     }
   };
+
+  const editAllergy = (allergyId) => {
+    setIsModalAllergyOpen(true);
+    setAllergyId(allergyId);
+  }
   
   if (!isOpen) return null;
 
@@ -277,7 +284,7 @@ export default function RegisterPatientModal({ isOpen, onClose, patientId }: Mod
                   <InputField 
                     label="Mobile Number" name="phone_number" error={errors.phone_number} 
                     defaultValue={patient?.phone_number || ''} readOnly={readOnlyCondition}
-                    icon={<Phone size={15}/>} placeholder="09XXXXXXXXX"
+                    icon={<Smartphone size={15}/>} placeholder="09XXXXXXXXX"
                   />
                   <InputField 
                     label="Landline Number" name="land_line" error={errors.land_line} 
@@ -500,12 +507,15 @@ export default function RegisterPatientModal({ isOpen, onClose, patientId }: Mod
                                 {/* ACTIONS */}
                                 <td className="p-4 text-right">
                                   <button 
+                                    type='button'
                                     className="text-slate-300 hover:text-indigo-600 p-1"
+                                    onClick={()=>editAllergy(allergy.id)}
                                     // onClick={() => handleEditAllergy(allergy)} // Kung may edit handler ka
                                   >
                                     <Edit2 size={14} />
                                   </button>
                                   <button 
+                                    type='button'
                                     className="text-slate-300 hover:text-red-500 p-1 ml-2"
                                     // onClick={() => handleDeleteAllergy(allergy.id)} // Kung may delete handler ka
                                   >
@@ -585,10 +595,8 @@ export default function RegisterPatientModal({ isOpen, onClose, patientId }: Mod
       <AllergyModal 
         isOpen={isModalAllergyOpen}
         onClose={() => setIsModalAllergyOpen(false)}
-        patientId={patientId || ""} // Yung galing sa props o URL
-        onSubmit={(data) => {
-          console.log("Data to send to backend:", data);
-        }}
+        patientId={patientId || ""}
+        allergyId={allergyId}
       />
 
     </>
