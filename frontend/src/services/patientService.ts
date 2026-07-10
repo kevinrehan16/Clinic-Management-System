@@ -67,8 +67,18 @@ export const patientService = {
   },
 
   // I-update ang allergy (PATCH method)
-  // updateAllergy: async (patientId, allergyId, data) => {
-  //   const response = await axios.patch(`${API_BASE_URL}/patients/${patientId}/allergies/${allergyId}/`, data);
-  //   return response.data;
-  // }
+  updateAllergy: async (patientId: string, allergyId: string, data: any) => {
+    const res = await apiClient.patch(`patients/${patientId}/allergies/${allergyId}/`, data);
+    return res.data;
+  },
+
+  softDeleteAllergy: async (patientId: string, allergyId: string, data: any) => {
+    const res = await apiClient.patch(`patients/${patientId}/allergies/${allergyId}/`, 
+      { 
+        is_deleted: true 
+      }
+    );
+    return res.data;
+  },
+  
 };

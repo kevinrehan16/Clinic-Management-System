@@ -1,10 +1,9 @@
 import React from 'react';
 import { X, Heart } from 'lucide-react';
-import { useAddAllergy } from '../../../hooks/usePatients';
+import { useAllergyQuery, useAddAllergy, useUpdateAllergy } from '../../../hooks/usePatients';
 import { modalAnimation } from '../../../utils/ModalAnimation';
 import { InputField } from '../../inputs/InputField';
 import { SelectField } from '../../inputs/SelectField';
-import { useAllergyQuery } from '../../../hooks/usePatients';
 
 interface AllergyModalProps {
   isOpen: boolean;
@@ -16,30 +15,33 @@ interface AllergyModalProps {
 export const AllergyModal = ({ isOpen, onClose, patientId ,allergyId }: AllergyModalProps) => {
   const { data: allergy, isLoading, isError } = useAllergyQuery(patientId, allergyId);
   const { isClosing, startClose, handleAnimationEnd } = modalAnimation(onClose);
-  const { mutate: addAllergy, isPending } = useAddAllergy();
+  const { mutate: addAllergy, isPending: pendingAddAllergy } = useAddAllergy();
+  const { mutate: updateAllergy, isPending: pendingUpdateAllergy } = useUpdateAllergy();
 
-  console.log(allergy);
+  const isSaving = pendingAddAllergy || pendingUpdateAllergy;
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    
-    // Kunin ang data direkta mula sa form
+
     const formData = new FormData(e.currentTarget);
     const data = Object.fromEntries(formData.entries());
 
-    addAllergy(
-      {
+    const payload = {
         patient: patientId,
         allergen: data.allergen as string,
         severity: data.severity as 'LOW' | 'MEDIUM' | 'HIGH',
-        reaction: data.reaction as string
-      },
-      {
-        onSuccess: () => {
-          startClose(); // Isara ang modal pag successful
-        }
-      }
-    );
+        reaction: data.reaction as string,
+    };
+
+    // Condition: Kung may allergyId, update; kung wala, add
+    if (allergyId) {
+        updateAllergy(
+        { patientId, allergyId, data: payload },
+        { onSuccess: () => startClose() }
+        );
+    } else {
+        addAllergy(payload, { onSuccess: () => startClose() });
+    }
   };
 
   if (!isOpen) return null;
@@ -104,17 +106,17 @@ export const AllergyModal = ({ isOpen, onClose, patientId ,allergyId }: AllergyM
             <button
               type="button"
               onClick={startClose}
-              disabled={isPending}
+              disabled={isSaving}
               className="px-4 py-2 text-sm font-semibold text-slate-600 bg-white border border-slate-200 rounded-lg hover:bg-slate-100"
             >
               Cancel
             </button>
             <button
               type="submit"
-              disabled={isPending}
+              disabled={isSaving}
               className="px-4 py-2 text-sm font-semibold text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 disabled:opacity-50"
             >
-              {isPending ? 'Saving...' : 'Save Allergy'}
+              {isSaving ? 'Saving...' : 'Save Allergy'}
             </button>
           </div>
         </form>

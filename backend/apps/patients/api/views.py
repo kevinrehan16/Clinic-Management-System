@@ -11,6 +11,7 @@ class PatientAllergyListCreateView(generics.ListCreateAPIView):
     def get_queryset(self):
         # 1. Kunin muna lahat
         queryset = PatientAllergy.objects.all()
+        queryset = PatientAllergy.objects.filter(is_deleted=False)
         
         # 2. Kunin ang 'patient_id' mula sa request URL (e.g., ?patient_id=uuid)
         patient_id = self.request.query_params.get('patient_id', None)

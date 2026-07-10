@@ -4,7 +4,7 @@ import {
   Shield, ShieldAlert, ClipboardList, HeartHandshake, Briefcase, Globe, Fingerprint, FileText, Building, LockKeyhole, Edit2, Trash2, Plus, Search,
   Smartphone
 } from 'lucide-react';
-import { usePatientDetails, useRegisterPatient, useUpdatePatient, usePatientAllergies } from '../../../hooks/usePatients';
+import { usePatientDetails, useRegisterPatient, useUpdatePatient, usePatientAllergies, useSoftDeleteAllergy } from '../../../hooks/usePatients';
 import { modalAnimation } from '../../../utils/ModalAnimation';
 import { AllergyModal } from './AllergyModal';
 import { InputField } from '../../inputs/InputField';
@@ -40,6 +40,7 @@ export default function RegisterPatientModal({ isOpen, onClose, patientId }: Mod
   const [activeTab, setActiveTab] = useState<TabType>('personal');
   const { mutate: register, isPending: isRegistering } = useRegisterPatient();
   const { mutate: update, isPending: isUpdating } = useUpdatePatient();
+  const { mutate: softDelete } = useSoftDeleteAllergy();
   
   const isEditMode = !!patientId;
   const [isEditing, setIsEditing] = useState(false);
@@ -79,10 +80,16 @@ export default function RegisterPatientModal({ isOpen, onClose, patientId }: Mod
     }
   };
 
-  const editAllergy = (allergyId) => {
+  const editAllergy = (allergyId: string) => {
     setIsModalAllergyOpen(true);
     setAllergyId(allergyId);
   }
+
+  const handleDeleteAllergy = (allergyId: string) => {
+  if (confirm("Wanna move the data into the archives?")) {
+    softDelete({ patientId, allergyId });
+  }
+};
   
   if (!isOpen) return null;
 
@@ -517,7 +524,7 @@ export default function RegisterPatientModal({ isOpen, onClose, patientId }: Mod
                                   <button 
                                     type='button'
                                     className="text-slate-300 hover:text-red-500 p-1 ml-2"
-                                    // onClick={() => handleDeleteAllergy(allergy.id)} // Kung may delete handler ka
+                                    onClick={() => handleDeleteAllergy(allergy.id)} // Kung may delete handler ka
                                   >
                                     <Trash2 size={14} />
                                   </button>
