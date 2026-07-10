@@ -7,14 +7,13 @@ export interface Patient {
   first_name: string;
   last_name: string;
   email: string;
-  phone_number: string | null;
   is_active: boolean;
   address: string;
   phone_number: string | null;
   birth_date: string;
   gender: string;
   blood_type: string;
-  address: string;
+  land_line: string | null;
 }
 
 // Service Methods
